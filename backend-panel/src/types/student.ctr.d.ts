@@ -4,4 +4,5 @@ declare interface IAddStudentRequest {
     type: string,
     advisor_name: string,
     co_advisor_name: string
+    remark: string | undefined
 }

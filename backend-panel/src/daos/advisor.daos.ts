@@ -18,7 +18,7 @@ class AdvisorDaos {
 
   public async updateAdvisor(id: any, option: any): Promise<any> {
     const connect = new MongosConnect();
-    const data = connect.updateById(DATABASE_NAME.DEV_DB, COLLECTION_NAME.STUDENT_TEST, id, option)
+    const data = connect.updateById(DATABASE_NAME.DEV_DB, COLLECTION_NAME.ADVISOR_TEST, id, option)
     return data
   }
 }

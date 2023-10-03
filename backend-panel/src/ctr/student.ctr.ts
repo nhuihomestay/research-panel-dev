@@ -24,7 +24,7 @@ class StudentCtr {
         $in: [body.advisor_name, body.co_advisor_name]
       }
     })
-    if (isAdvisor.length === 0) {
+    if (isAdvisor.length < 2) {
       return {
         data: {},
         devMessage: "This Advisor is invalid"
@@ -44,20 +44,21 @@ class StudentCtr {
       type: body.type,
       advisor_name: body.advisor_name,
       co_advisor_name: body.co_advisor_name,
+      checked_by: null,
+      remark: body.remark ? body.remark : null,
       created_at: new Date(Date.now()).toISOString(),
       updated_at: new Date(Date.now()).toISOString()
     })
     await advisorDaos.updateAdvisor(
       {
-        "advisor_name": {
-          $in: [body.advisor_name, body.co_advisor_name]
-        }
+        advisor_name: { $in: [body.advisor_name, body.co_advisor_name] }
       },
       {
         $inc: { [`${lowerCase(body.type)}_count`]: 1 },
-        $set: { updated_at: new Date() }
+        $set: { updated_at: new Date().toISOString() }
       }
     );
+
 
     return {
       data: insertData,

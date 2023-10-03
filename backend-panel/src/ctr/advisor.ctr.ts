@@ -1,4 +1,5 @@
-import { AdvisorDaos } from '@daos';
+import { AdvisorDaos, StudentDaos } from '@daos';
+import { lowerCase } from 'lodash';
 
 class AdvisorCtr {
   public async getAdvisor(query: any): Promise<any> {
@@ -34,6 +35,46 @@ class AdvisorCtr {
     })
     return {
       data: data,
+      devMessage: "Success",
+    };
+  }
+
+  public async checkThesis(body: any): Promise<any> {
+    const advisorDaos = new AdvisorDaos();
+    const studentDaos = new StudentDaos();
+    const queryStudent = await studentDaos.queryStudent({ student_id: body.student_id });
+    if (queryStudent.length === 0) {
+      return {
+        data: {},
+        devMessage: "student_id is invalid"
+      }
+    }
+
+    const updateAdvisor = await advisorDaos.updateAdvisor({ advisor_name: body.advisor_name }, {
+      $inc: {
+        [`${lowerCase(body.type)}_count`]: 1 
+      },
+      $set: {
+        updated_at: new Date(Date.now()).toISOString()
+      }
+    })
+
+    if (updateAdvisor.matchedCount === 0) {
+      return {
+        data: {},
+        devMessage: "advisor_name is invalid"
+      }
+    }
+
+    await studentDaos.updateStudent({ student_id: body.student_id }, {
+      $set: {
+        checked_by: body.advisor_name,
+        updated_at: new Date(Date.now()).toISOString()
+      }
+    })
+
+    return {
+      data: {},
       devMessage: "Success",
     };
   }

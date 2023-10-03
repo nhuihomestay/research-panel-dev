@@ -14,4 +14,10 @@ router.post('/add', async (req: Request, res: Response) => {
     res.json(result)
 })
 
+router.post('/check', async (req: Request, res: Response) => {
+    const advisorCtr = new AdvisorCtr()
+    const result = await advisorCtr.checkThesis(req.body)
+    res.json(result)
+})
+
 export default router

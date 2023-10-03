@@ -51,7 +51,7 @@ class MongosConnect {
         try {
             await client.connect()
             const selectDB = client.db(db)
-            const data = await selectDB.collection(collection).updateOne({ "_id": id }, option)
+            const data = await selectDB.collection(collection).updateMany(id, option)
             return data
         } catch (err: any) {
             console.log(err);
