@@ -45,6 +45,8 @@ class StudentCtr {
       advisor_name: body.advisor_name,
       co_advisor_name: body.co_advisor_name,
       checked_by: null,
+      grade: null,
+      semester: null,
       remark: body.remark ? body.remark : null,
       created_at: new Date(Date.now()).toISOString(),
       updated_at: new Date(Date.now()).toISOString()

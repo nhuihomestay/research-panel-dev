@@ -52,7 +52,7 @@ class AdvisorCtr {
 
     const updateAdvisor = await advisorDaos.updateAdvisor({ advisor_name: body.advisor_name }, {
       $inc: {
-        [`${lowerCase(body.type)}_count`]: 1 
+        [`${lowerCase(queryStudent[0].type)}_count`]: 1 
       },
       $set: {
         updated_at: new Date(Date.now()).toISOString()

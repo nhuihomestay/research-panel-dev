@@ -5,4 +5,6 @@ declare interface IAddStudentRequest {
     advisor_name: string,
     co_advisor_name: string
     remark: string | undefined
+    grade: string | undefined
+    semester: string | undefined
 }
