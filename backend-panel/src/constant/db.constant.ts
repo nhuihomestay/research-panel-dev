@@ -7,6 +7,7 @@ enum COLLECTION_NAME {
     ADVISOR = 'advisor',
     ADVISOR_TEST = 'advisor-test',
     STUDENT = 'student',
+    STUDENT_TEST = 'student-test',
     USER = 'user'
 }
 

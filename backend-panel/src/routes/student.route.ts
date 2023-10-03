@@ -1,16 +1,16 @@
 import { Request, Response, Router } from 'express';
-import { AdvisorCtr } from '@ctr';
+import { StudentCtr } from '@ctr';
 const router = Router()
 
 router.get('/', async (req: Request, res: Response) => {
-    const advisorCtr = new AdvisorCtr()
-    const result = await advisorCtr.getAdvisor(req.query)
+    const studentCtr = new StudentCtr()
+    const result = await studentCtr.getStudent(req.query)
     res.json(result)
 })
 
 router.post('/add', async (req: Request, res: Response) => {
-    const advisorCtr = new AdvisorCtr()
-    const result = await advisorCtr.addAdvisor(req.body)
+    const studentCtr = new StudentCtr()
+    const result = await studentCtr.addStudent(req.body)
     res.json(result)
 })
 
