@@ -86,11 +86,11 @@ export const Track = () => {
     fetchData();
   }, []);
 
-  const updateData = async (e: any, id: any) => {
+  const updateData = async (e: any, student_id: any) => {
     e.preventDefault();
     const studentData: any = {};
 
-    if (id !== "") studentData.student_id = id;
+    studentData.student_id = student_id;
     if (studentId !== "") studentData.new_student_id = studentId;
     if (studentName !== "") studentData.student_name = studentName;
     if (type !== "") studentData.type = type;
@@ -213,7 +213,7 @@ export const Track = () => {
                         />
                       </>
                     ) : (
-                      data.student_id.$numberLong
+                      data.student_id
                     )}
                   </td>
                   <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 ">
@@ -388,7 +388,7 @@ export const Track = () => {
                     {data._id === editId ? (
                       <>
                         <button
-                          onClick={(e) => updateData(e, data._id)}
+                          onClick={(e) => updateData(e, data.student_id)}
                           className="flex justify-center items-center h-6 px-2 ml-4 rounded font-semibold text-blue-100  text-[12px] bg-blue-600  hover:bg-blue-800"
                         >
                           Update
