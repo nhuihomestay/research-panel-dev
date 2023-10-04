@@ -2,9 +2,9 @@ import { AdvisorDaos, StudentDaos } from '@daos';
 import { lowerCase } from 'lodash';
 
 class AdvisorCtr {
-  public async getAdvisor(query: any): Promise<any> {
+  public async getAdvisor(body: any): Promise<any> {
     const advisorDaos = new AdvisorDaos()
-    const data = await advisorDaos.queryAdvisor(query ? query : {})
+    const data = await advisorDaos.queryAdvisor(body ? body : {})
     return {
       data: data,
       devMessage: "Success",
@@ -23,10 +23,10 @@ class AdvisorCtr {
     if (isDuplicate.length > 0) {
       return {
         data: {},
-        devMessage: "Dupplicated advisor_name"
+        devMessage: "Already Registered"
       }
     }
-    const data = await advisorDaos.insertAdvisor({
+    await advisorDaos.insertAdvisor({
       advisor_name: body.advisor_name,
       th_count: 0,
       ls_count: 0,
@@ -34,7 +34,7 @@ class AdvisorCtr {
       updated_at: new Date(Date.now()).toISOString()
     })
     return {
-      data: data,
+      data: {},
       devMessage: "Success",
     };
   }
@@ -52,7 +52,7 @@ class AdvisorCtr {
 
     const updateAdvisor = await advisorDaos.updateAdvisor({ advisor_name: body.advisor_name }, {
       $inc: {
-        [`${lowerCase(body.type)}_count`]: 1 
+        [`${lowerCase(queryStudent[0].type)}_count`]: 1 
       },
       $set: {
         updated_at: new Date(Date.now()).toISOString()

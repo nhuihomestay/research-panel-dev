@@ -14,4 +14,10 @@ router.post('/add', async (req: Request, res: Response) => {
     res.json(result)
 })
 
+router.put('/update', async (req: Request, res: Response) => {
+    const studentCtr = new StudentCtr()
+    const result = await studentCtr.updateStudent(req.body)
+    res.json(result)
+})
+
 export default router
