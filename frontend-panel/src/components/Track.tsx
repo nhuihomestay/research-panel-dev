@@ -1,5 +1,7 @@
-import { useState, useContext } from "react";
-import { DataContext } from "../Context";
+import { useState, useContext, useEffect } from "react";
+// import { DataContext } from "../Context";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 const advisorData = [
   { advisor: "ดร.ธัญญรัตน์" },
@@ -11,10 +13,9 @@ const advisorData = [
   { advisor: "ดร.นันทวัน" },
 ];
 
-
 export const Track = () => {
   const [batch, setbatch] = useState<string>("");
-  const [studentId, setStudentId] = useState("");
+  // const [studentId, setStudentId] = useState("");
   const [studentName, setStudentName] = useState("");
   const [type, setType] = useState("");
   const [topic, setTopic] = useState("");
@@ -24,39 +25,127 @@ export const Track = () => {
   const [grade, setGrade] = useState("");
   const [remark, setRemark] = useState("");
   const [editId, setEditId] = useState(0);
-  const { data }: any = useContext(DataContext);
+  const [data, setData] = useState([]);
+  // const { data }: any = useContext(DataContext);
 
-  const isValidate = () => {
+  const isValidate = (advisor_name: any, co_advisor_name: any) => {
     let proceed = true;
     let errMsg = "Enter your : ";
     if (advisor === coAdvisor) {
       proceed = false;
       errMsg += "Advisor, don't repeat it. ";
     }
+    if (coAdvisor === advisor_name) {
+      proceed = false;
+      errMsg += "Advisor, don't repeat it. ";
+    }
+
+    if (advisor === co_advisor_name) {
+      proceed = false;
+      errMsg += "Advisor, don't repeat it. ";
+    }
+
     if (!proceed) {
-      alert(errMsg);
+      toast.error(errMsg);
       console.log(errMsg);
     }
     return proceed;
   };
 
-  const updateData = (e: any, id: any) => {
+  // const updateData = (e: any, id: any) => {
+  //   e.preventDefault();
+  //   if (isValidate()) {
+  //     const advisorData = {
+  //       id: id,
+  //       studentId: studentId,
+  //       batch: batch,
+  //       studentName: studentName,
+  //       type: type,
+  //       topic: topic,
+  //       advisor: advisor,
+  //       coAdvisor: coAdvisor,
+  //       term: term,
+  //       grade: grade,
+  //       remark: remark,
+  //     };
+  //     console.log(advisorData);
+  //   }
+  // };
+  // id: id,
+  //         student_id: studentId ? studentId : '',
+  //         batch: batch,
+  //         student_name: studentName,
+  //         type: type,
+  //         topic: topic,
+  //         advisor_name: advisor,
+  //         co_advisor_name: coAdvisor,
+  //         semester: term,
+  //         grade: grade,
+  //         remark: remark,
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/student/");
+        setData(response.data.data);
+        console.log(`Data na ka : ${data}`);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  });
+
+  const updateData = async (
+    e: any,
+    student_id: any,
+    advisor_name: any,
+    co_advisor_name: any
+  ) => {
     e.preventDefault();
-    if (isValidate()) {
-      const advisorData = {
-        id: id,
-        studentId: studentId,
-        batch: batch,
-        studentName: studentName,
-        type: type,
-        topic: topic,
-        advisor: advisor,
-        coAdvisor: coAdvisor,
-        term: term,
-        grade: grade,
-        remark: remark,
-      };
-      console.log(advisorData);
+    const studentData: any = {};
+
+    studentData.student_id = String(student_id);
+    // if (studentId !== "") studentData.new_student_id = studentId;
+    if (studentName !== "") studentData.student_name = studentName;
+    if (type !== "") studentData.type = type;
+    if (topic !== "") studentData.topic = topic;
+    if (isValidate(String(advisor_name), String(co_advisor_name))) {
+      if (advisor !== "") studentData.advisor_name = advisor;
+      if (coAdvisor !== "") studentData.co_advisor_name = coAdvisor;
+    }
+    if (grade !== "") studentData.grade = grade;
+    if (batch !== "") studentData.batch = batch;
+    if (remark !== "") studentData.remark = remark;
+    if (term !== "") studentData.semester = term;
+
+    console.log(studentData);
+
+    try {
+      const response = await axios.put(
+        `http://localhost:3000/api/student/update`,
+        studentData
+      );
+
+      console.log(response);
+      console.log("PUT", response.status);
+      setEditId(0);
+      if (response.status === 200) {
+        toast.success("Update successfully.");
+      }
+      // setbatch("");
+      // setStudentId("");
+      // setStudentName("");
+      // setType("");
+      // setTopic("");
+      // setAdvisor("");
+      // setCoAdvisor("");
+      // setTerm("");
+      // setGrade("");
+      // setRemark("");
+      // setEditId(null);
+    } catch (err: any) {
+      toast.error("Failed: " + err.message);
     }
   };
 
@@ -92,7 +181,7 @@ export const Track = () => {
                 <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
                   Co-Advisor
                 </th>
-                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                <th className="w-[200px] px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
                   Semester
                 </th>
                 <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
@@ -110,10 +199,10 @@ export const Track = () => {
             <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
               {data.map((data: any, index: any) => (
                 <tr key={index}>
-                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">
                     {index + 1}
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">
                     {data._id === editId ? (
                       <>
                         <input
@@ -130,26 +219,14 @@ export const Track = () => {
                       data.batch
                     )}
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                    {data._id === editId ? (
-                      <>
-                        <input
-                          value={data.studentId || studentId}
-                          onChange={(e) => setStudentId(e.target.value)}
-                          type="text"
-                          className="w-[100px] px-2 placeholder:text-sm text-sm text-black"
-                          placeholder="ID"
-                        />
-                      </>
-                    ) : (
-                      data.student_id.$numberLong
-                    )}
+                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">
+                    {data.student_id}
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 ">
                     {data._id === editId ? (
                       <>
                         <input
-                          value={data.student_name || studentName}
+                          value={studentName || data.student_name}
                           onChange={(e) => setStudentName(e.target.value)}
                           type="text"
                           className="w-[150px] px-2 placeholder:text-sm text-sm text-black"
@@ -160,7 +237,7 @@ export const Track = () => {
                       data.student_name
                     )}
                   </td>
-                  <td className="text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                  <td className="text-sm text-gray-500 dark:text-gray-300">
                     {data._id === editId ? (
                       <>
                         <div className="flex leading-2">
@@ -207,10 +284,11 @@ export const Track = () => {
                       data.topic
                     )}
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 ">
                     {data._id === editId ? (
                       <>
                         <select
+                          value={data.advisor || advisor}
                           name="advisor"
                           onChange={(e) => setAdvisor(e.target.value)}
                           className="w-[100px] px-2 placeholder:text-sm text-sm text-black"
@@ -234,10 +312,11 @@ export const Track = () => {
                       data.advisor_name
                     )}
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                  <td className="w-[150px] px-4 py-4 text-sm text-gray-500 dark:text-gray-300">
                     {data._id === editId ? (
                       <>
                         <select
+                          value={data.advisor || coAdvisor}
                           name="Co-Advisor"
                           onChange={(e) => setCoAdvisor(e.target.value)}
                           className="w-[100px] px-2 placeholder:text-sm text-sm text-black"
@@ -261,11 +340,11 @@ export const Track = () => {
                       data.co_advisor_name
                     )}
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 ">
                     {data._id === editId ? (
                       <>
                         <input
-                          value={term || data.term}
+                          value={term || data.semester}
                           onChange={(e) => setTerm(e.target.value)}
                           type="text"
                           className="w-[100px] px-2 placeholder:text-sm text-sm text-black"
@@ -276,7 +355,7 @@ export const Track = () => {
                       data.semester
                     )}
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">
                     {data._id === editId ? (
                       <>
                         <input
@@ -317,7 +396,14 @@ export const Track = () => {
                     {data._id === editId ? (
                       <>
                         <button
-                          onClick={(e) => updateData(e, data.id)}
+                          onClick={(e) =>
+                            updateData(
+                              e,
+                              data.student_id,
+                              data.advisor_name,
+                              data.co_advisor_name
+                            )
+                          }
                           className="flex justify-center items-center h-6 px-2 ml-4 rounded font-semibold text-blue-100  text-[12px] bg-blue-600  hover:bg-blue-800"
                         >
                           Update
@@ -330,6 +416,7 @@ export const Track = () => {
             </tbody>
           </table>
         </div>
+        <ToastContainer />
       </div>
     </>
   );

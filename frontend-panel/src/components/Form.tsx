@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
 
 const advisorData = [
   { advisor: "ดร.ธัญญรัตน์" },
@@ -59,46 +60,101 @@ export const Form = () => {
     return proceed;
   };
 
-  // send data student
-  const saveData = (e: any) => {
+  const saveData = async (e: any) => {
     e.preventDefault();
     if (isValidate()) {
-      const formData = {
-        studentId: studentId,
-        bactch: batch,
-        studentName: studentName,
-        type: type,
-        topic: topic,
-        advisor: advisor,
-        coAdvisor: coAdvisor,
-        term: term,
-        grade: grade,
-        remark: remark,
-      };
-      console.log(formData);
-      setBatch("");
-      setStudentId("");
-      setStudentName("");
-      setType("");
-      setTopic("");
-      setAdvisor("");
-      setCoAdvisor("");
-      setTerm("");
-      setGrade("");
-      setRemark("");
+      try {
+        const response = await axios.post(
+          `http://localhost:3000/api/student/add`,
+          {
+            student_id: studentId,
+            batch: batch,
+            student_name: studentName,
+            type: type,
+            topic: topic,
+            advisor_name: advisor,
+            co_advisor_name: coAdvisor,
+            semester: term,
+            grade: grade,
+            remark: remark,
+          }
+        );
+        console.log(response);
+        console.log("PUT", response.status);
+        if (response.status === 200) {
+          toast.success("Update successfully.");
+          // setReload(!reload);
+        }
+        // setEditId(null);
+      } catch (err: any) {
+        toast.error("Failed: " + err.message);
+      }
     }
   };
 
-  // send data advisor
-  const saveDataAD = (e: any) => {
+  const saveDataAD = async (e: any) => {
     e.preventDefault();
 
-    const advisorData = {
-      advisor: advisor,
-    };
-    setAdvisor("");
-    console.log(advisorData);
+    try {
+      const response = await axios.post(
+        `http://localhost:3000/api/advisor/add`,
+        {
+          advisor_name: advisor,
+        }
+      );
+      console.log(response);
+      console.log("PUT", response.status);
+      if (response.status === 200) {
+        toast.success("Update successfully.");
+        // setReload(!reload);
+      }
+      // setEditId(null);
+      console.log(`test : ${response}`);
+    } catch (err: any) {
+      toast.error("Failed: " + err.message);
+    }
   };
+
+  // send data student
+  // const saveData = (e: any) => {
+  //   e.preventDefault();
+  //   if (isValidate()) {
+  //     const formData = {
+  //       studentId: studentId,
+  //       batch: batch,
+  //       studentName: studentName,
+  //       type: type,
+  //       topic: topic,
+  //       advisor: advisor,
+  //       coAdvisor: coAdvisor,
+  //       term: term,
+  //       grade: grade,
+  //       remark: remark,
+  //     };
+  //     console.log(formData);
+  // setBatch("");
+  // setStudentId("");
+  // setStudentName("");
+  // setType("");
+  // setTopic("");
+  // setAdvisor("");
+  // setCoAdvisor("");
+  // setTerm("");
+  // setGrade("");
+  // setRemark("");
+  //   }
+  // };
+
+  // send data advisor
+  // const saveDataAD = (e: any) => {
+  //   e.preventDefault();
+
+  //   const advisorData = {
+  //     advisor: advisor,
+  //   };
+  //   setAdvisor("");
+  //   console.log(advisorData);
+  // };
 
   return (
     <div className="flex min-h-screen dark:bg-[#4c4d5c]">
@@ -136,7 +192,7 @@ export const Form = () => {
                 <input
                   value={studentId}
                   onChange={(e) => setStudentId(e.target.value)}
-                  type="text"
+                  type="number"
                   className="w-full px-2 rounded-r-lg placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-[#8278d9] focus:border-transparent ring-1 ring-inset ring-[#8278d9]"
                   placeholder="ID"
                 />
@@ -172,7 +228,7 @@ export const Form = () => {
                   <option className="text-[#131c85]" value="TH">
                     TH
                   </option>
-                  <option className="text-[#131c85]" value="TS">
+                  <option className="text-[#131c85]" value="LS">
                     IS
                   </option>
                 </select>
