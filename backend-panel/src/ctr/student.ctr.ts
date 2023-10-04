@@ -68,7 +68,7 @@ class StudentCtr {
     };
   }
 
-  public async updateStudent(body: IAddStudentRequest): Promise<any> {
+  public async updateStudent(body: IUpdateStudentRequest): Promise<any> {
     if (!body) {
       return {
         data: {},

@@ -4,7 +4,7 @@ const router = Router()
 
 router.get('/', async (req: Request, res: Response) => {
     const studentCtr = new StudentCtr()
-    const result = await studentCtr.getStudent(req.query)
+    const result = await studentCtr.getStudent(req.body)
     res.json(result)
 })
 
