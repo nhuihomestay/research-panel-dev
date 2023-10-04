@@ -1,5 +1,5 @@
 declare interface IAddStudentRequest {
-    student_id: number,
+    student_id: string,
     student_name: string,
     type: string,
     topic: string,
@@ -13,8 +13,8 @@ declare interface IAddStudentRequest {
 }
 
 declare interface IUpdateStudentRequest {
-    student_id: number,
-    new_student_id: number,
+    student_id: string,
+    new_student_id: string,
     student_name: string,
     type: string,
     topic: string,
