@@ -26,7 +26,7 @@ class AdvisorCtr {
         devMessage: "Already Registered"
       }
     }
-    const data = await advisorDaos.insertAdvisor({
+    await advisorDaos.insertAdvisor({
       advisor_name: body.advisor_name,
       th_count: 0,
       ls_count: 0,

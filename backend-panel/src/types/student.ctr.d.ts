@@ -1,5 +1,6 @@
 declare interface IAddStudentRequest {
     student_id: number,
+    new_student_id: number,
     student_name: string,
     type: string,
     topic: string,
