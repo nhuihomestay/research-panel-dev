@@ -2,9 +2,9 @@ import { StudentDaos, AdvisorDaos } from '@daos';
 import { lowerCase } from 'lodash';
 
 class StudentCtr {
-  public async getStudent(query: any): Promise<any> {
+  public async getStudent(body: any): Promise<any> {
     const studentDaos = new StudentDaos()
-    const data = await studentDaos.queryStudent(query ? query : {})
+    const data = await studentDaos.queryStudent(body ? body : {})
     return {
       data: data,
       devMessage: "Success",
@@ -20,17 +20,17 @@ class StudentCtr {
       }
     }
     const advisorDaos = new AdvisorDaos()
-    // const isAdvisor = await advisorDaos.queryAdvisor({
-    //   "advisor_name": {
-    //     $in: [body.advisor_name, body.co_advisor_name]
-    //   }
-    // })
-    // if (isAdvisor.length < 2) {
-    //   return {
-    //     data: {},
-    //     devMessage: "This Advisor is invalid"
-    //   }
-    // }
+    const isAdvisor = await advisorDaos.queryAdvisor({
+      "advisor_name": {
+        $in: [body.advisor_name, body.co_advisor_name]
+      }
+    })
+    if (isAdvisor.length < 2) {
+      return {
+        data: {},
+        devMessage: "This Advisor is invalid"
+      }
+    }
     const studentDaos = new StudentDaos()
     const isStudent = await studentDaos.queryStudent({ student_name: body.student_name, student_id: body.student_id })
     if (isStudent.length > 0) {
@@ -69,7 +69,7 @@ class StudentCtr {
     };
   }
 
-  public async updateStudent(body: IAddStudentRequest): Promise<any> {
+  public async updateStudent(body: IUpdateStudentRequest): Promise<any> {
     if (!body) {
       return {
         data: {},
