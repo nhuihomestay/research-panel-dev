@@ -19,17 +19,17 @@ class StudentCtr {
       }
     }
     const advisorDaos = new AdvisorDaos()
-    const isAdvisor = await advisorDaos.queryAdvisor({
-      "advisor_name": {
-        $in: [body.advisor_name, body.co_advisor_name]
-      }
-    })
-    if (isAdvisor.length < 2) {
-      return {
-        data: {},
-        devMessage: "This Advisor is invalid"
-      }
-    }
+    // const isAdvisor = await advisorDaos.queryAdvisor({
+    //   "advisor_name": {
+    //     $in: [body.advisor_name, body.co_advisor_name]
+    //   }
+    // })
+    // if (isAdvisor.length < 2) {
+    //   return {
+    //     data: {},
+    //     devMessage: "This Advisor is invalid"
+    //   }
+    // }
     const studentDaos = new StudentDaos()
     const isStudent = await studentDaos.queryStudent({ student_name: body.student_name, student_id: body.student_id })
     if (isStudent.length > 0) {
@@ -38,16 +38,17 @@ class StudentCtr {
         devMessage: "Already Registered"
       }
     }
-    const insertData = await studentDaos.insertStudent({
+    await studentDaos.insertStudent({
       student_id: body.student_id,
       student_name: body.student_name,
       type: body.type,
+      topic: body.topic,
       advisor_name: body.advisor_name,
       co_advisor_name: body.co_advisor_name,
-      checked_by: null,
-      grade: null,
-      semester: null,
-      remark: body.remark ? body.remark : null,
+      grade: body.grade,
+      semester: body.semester,
+      batch: body.batch,
+      remark: body.remark,
       created_at: new Date(Date.now()).toISOString(),
       updated_at: new Date(Date.now()).toISOString()
     })
@@ -63,7 +64,57 @@ class StudentCtr {
 
 
     return {
-      data: insertData,
+      data: {},
+      devMessage: "Success",
+    };
+  }
+
+  public async updateStudent(body: IAddStudentRequest): Promise<any> {
+    if (!body) {
+      return {
+        data: {},
+        devMessage: "Request is incomplete"
+      }
+    }
+    const advisorDaos = new AdvisorDaos()
+    // const isAdvisor = await advisorDaos.queryAdvisor({
+    //   "advisor_name": {
+    //     $in: [body.advisor_name, body.co_advisor_name]
+    //   }
+    // })
+    // if (isAdvisor.length < 2) {
+    //   return {
+    //     data: {},
+    //     devMessage: "This Advisor is invalid"
+    //   }
+    // }
+    const studentDaos = new StudentDaos()
+    const isStudent = await studentDaos.queryStudent({ student_name: body.student_name, student_id: body.student_id })
+    if (isStudent.length > 0) {
+      return {
+        data: {},
+        devMessage: "Already Registered"
+      }
+    }
+    await studentDaos.updateStudent({ student_id: body.student_id }, {
+      $set: {
+        student_id: body.student_id,
+        student_name: body.student_name,
+        type: body.type,
+        topic: body.topic,
+        advisor_name: body.advisor_name,
+        co_advisor_name: body.co_advisor_name,
+        grade: body.grade,
+        semester: body.semester,
+        batch: body.batch,
+        remark: body.remark,
+        is_graduated: body.is_graduated,
+        updated_at: new Date(Date.now()).toISOString()
+      }
+    })
+
+    return {
+      data: {},
       devMessage: "Success",
     };
   }
