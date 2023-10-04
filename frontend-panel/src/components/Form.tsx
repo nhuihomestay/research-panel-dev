@@ -109,6 +109,7 @@ export const Form = () => {
         // setReload(!reload);
       }
       // setEditId(null);
+      console.log(`test : ${response}`);
     } catch (err: any) {
       toast.error("Failed: " + err.message);
     }

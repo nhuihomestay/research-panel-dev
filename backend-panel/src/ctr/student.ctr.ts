@@ -70,6 +70,7 @@ class StudentCtr {
   }
 
   public async updateStudent(body: IUpdateStudentRequest): Promise<any> {
+    console.log(body)
     if (!body) {
       return {
         data: {},
@@ -91,14 +92,14 @@ class StudentCtr {
     updatedField.updated_at = new Date(Date.now()).toISOString()
 
     const studentDaos = new StudentDaos()
-    const isStudent = await studentDaos.queryStudent({ student_name: body.student_name })
-    if (isStudent.length === 0) {
-      return {
-        data: {},
-        devMessage: "Dupplicated student_name"
-      }
-    }
-    await studentDaos.updateStudent({ student_id: body.student_id }, {
+    // const isStudent = await studentDaos.queryStudent({ student_name: body.student_name })
+    // if (isStudent.length === 0) {
+    //   return {
+    //     data: {},
+    //     devMessage: "Dupplicated student_name"
+    //   }
+    // }
+    await studentDaos.updateStudent({ _id: body.student_id }, {
       $set: updatedField
     })
 

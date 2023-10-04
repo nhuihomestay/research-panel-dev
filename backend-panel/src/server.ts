@@ -4,14 +4,21 @@ import 'express-async-errors';
 import expressAutosanitizer from 'express-autosanitizer';
 import path from 'path';
 import BaseRouter from './routes';
-// import bodyParser from 'body-parser'
+import cors from 'cors';
 
 const app = express();
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    next();
-});
+
+// app.use((req, res, next) => {
+//     res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
+//     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+//     next();
+// });
+
+app.use(cors({
+    origin: 'http://localhost:5173', // กำหนดโดเมนของ React ที่พอร์ต 3000
+    methods: ["get","post","put"],
+    credentials: true, // อนุญาตการส่งคุกกี้ไปยังเซิร์ฟเวอร์ Node.js
+  }));
 
 
 app.use(express.json({ limit: '10MB' }), (error: any, req: any, res: any, next: any) => {

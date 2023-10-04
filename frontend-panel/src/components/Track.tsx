@@ -107,7 +107,7 @@ export const Track = () => {
     try {
       const response = await axios.put(
         `http://localhost:3000/api/student/update`,
-        studentData
+        { body: studentData }
       );
       console.log(response);
       console.log("PUT", response.status);
@@ -115,16 +115,16 @@ export const Track = () => {
         toast.success("Update successfully.");
         // setReload(!reload);
       }
-      setbatch("");
-      setStudentId("");
-      setStudentName("");
-      setType("");
-      setTopic("");
-      setAdvisor("");
-      setCoAdvisor("");
-      setTerm("");
-      setGrade("");
-      setRemark("");
+      // setbatch("");
+      // setStudentId("");
+      // setStudentName("");
+      // setType("");
+      // setTopic("");
+      // setAdvisor("");
+      // setCoAdvisor("");
+      // setTerm("");
+      // setGrade("");
+      // setRemark("");
       // setEditId(null);
     } catch (err: any) {
       toast.error("Failed: " + err.message);
