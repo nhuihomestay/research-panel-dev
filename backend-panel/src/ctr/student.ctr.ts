@@ -19,17 +19,17 @@ class StudentCtr {
       }
     }
     const advisorDaos = new AdvisorDaos()
-    // const isAdvisor = await advisorDaos.queryAdvisor({
-    //   "advisor_name": {
-    //     $in: [body.advisor_name, body.co_advisor_name]
-    //   }
-    // })
-    // if (isAdvisor.length < 2) {
-    //   return {
-    //     data: {},
-    //     devMessage: "This Advisor is invalid"
-    //   }
-    // }
+    const isAdvisor = await advisorDaos.queryAdvisor({
+      "advisor_name": {
+        $in: [body.advisor_name, body.co_advisor_name]
+      }
+    })
+    if (isAdvisor.length < 2) {
+      return {
+        data: {},
+        devMessage: "This Advisor is invalid"
+      }
+    }
     const studentDaos = new StudentDaos()
     const isStudent = await studentDaos.queryStudent({ student_name: body.student_name, student_id: body.student_id })
     if (isStudent.length > 0) {
