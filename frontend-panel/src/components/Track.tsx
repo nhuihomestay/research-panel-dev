@@ -1,5 +1,7 @@
-import { useState, useContext } from "react";
-import { DataContext } from "../Context";
+import { useState, useContext, useEffect } from "react";
+// import { DataContext } from "../Context";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 const advisorData = [
   { advisor: "ดร.ธัญญรัตน์" },
@@ -10,7 +12,6 @@ const advisorData = [
   { advisor: "ดร.วิภัสสร" },
   { advisor: "ดร.นันทวัน" },
 ];
-
 
 export const Track = () => {
   const [batch, setbatch] = useState<string>("");
@@ -24,39 +25,109 @@ export const Track = () => {
   const [grade, setGrade] = useState("");
   const [remark, setRemark] = useState("");
   const [editId, setEditId] = useState(0);
-  const { data }: any = useContext(DataContext);
+  // const { data }: any = useContext(DataContext);
 
-  const isValidate = () => {
-    let proceed = true;
-    let errMsg = "Enter your : ";
-    if (advisor === coAdvisor) {
-      proceed = false;
-      errMsg += "Advisor, don't repeat it. ";
-    }
-    if (!proceed) {
-      alert(errMsg);
-      console.log(errMsg);
-    }
-    return proceed;
-  };
+  // const isValidate = () => {
+  //   let proceed = true;
+  //   let errMsg = "Enter your : ";
+  //   if (advisor === coAdvisor) {
+  //     proceed = false;
+  //     errMsg += "Advisor, don't repeat it. ";
+  //   }
+  //   if (!proceed) {
+  //     alert(errMsg);
+  //     console.log(errMsg);
+  //   }
+  //   return proceed;
+  // };
 
-  const updateData = (e: any, id: any) => {
+  // const updateData = (e: any, id: any) => {
+  //   e.preventDefault();
+  //   if (isValidate()) {
+  //     const advisorData = {
+  //       id: id,
+  //       studentId: studentId,
+  //       batch: batch,
+  //       studentName: studentName,
+  //       type: type,
+  //       topic: topic,
+  //       advisor: advisor,
+  //       coAdvisor: coAdvisor,
+  //       term: term,
+  //       grade: grade,
+  //       remark: remark,
+  //     };
+  //     console.log(advisorData);
+  //   }
+  // };
+  // id: id,
+  //         student_id: studentId ? studentId : '',
+  //         batch: batch,
+  //         student_name: studentName,
+  //         type: type,
+  //         topic: topic,
+  //         advisor_name: advisor,
+  //         co_advisor_name: coAdvisor,
+  //         semester: term,
+  //         grade: grade,
+  //         remark: remark,
+
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/student/");
+        setData(response.data.data);
+        console.log(`Data na ka : ${data}`);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const updateData = async (e: any, id: any) => {
     e.preventDefault();
-    if (isValidate()) {
-      const advisorData = {
-        id: id,
-        studentId: studentId,
-        batch: batch,
-        studentName: studentName,
-        type: type,
-        topic: topic,
-        advisor: advisor,
-        coAdvisor: coAdvisor,
-        term: term,
-        grade: grade,
-        remark: remark,
-      };
-      console.log(advisorData);
+    const studentData: any = {};
+
+    if (id !== "") studentData.student_id = id;
+    if (studentId !== "") studentData.new_student_id = studentId;
+    if (studentName !== "") studentData.student_name = studentName;
+    if (type !== "") studentData.type = type;
+    if (topic !== "") studentData.topic = topic;
+    if (advisor !== "") studentData.advisor_name = advisor;
+    if (coAdvisor !== "") studentData.co_advisor_name = coAdvisor;
+    if (grade !== "") studentData.grade = grade;
+    if (batch !== "") studentData.batch = batch;
+    if (remark !== "") studentData.remark = remark;
+    if (term !== "") studentData.semester = term;
+
+    console.log(studentData);
+
+    try {
+      const response = await axios.put(
+        `http://localhost:3000/api/student/update`,
+        studentData
+      );
+      console.log(response);
+      console.log("PUT", response.status);
+      if (response.status === 200) {
+        toast.success("Update successfully.");
+        // setReload(!reload);
+      }
+      setbatch("");
+      setStudentId("");
+      setStudentName("");
+      setType("");
+      setTopic("");
+      setAdvisor("");
+      setCoAdvisor("");
+      setTerm("");
+      setGrade("");
+      setRemark("");
+      // setEditId(null);
+    } catch (err: any) {
+      toast.error("Failed: " + err.message);
     }
   };
 
@@ -92,7 +163,7 @@ export const Track = () => {
                 <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
                   Co-Advisor
                 </th>
-                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                <th className="w-[200px] px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
                   Semester
                 </th>
                 <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
@@ -110,10 +181,10 @@ export const Track = () => {
             <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
               {data.map((data: any, index: any) => (
                 <tr key={index}>
-                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">
                     {index + 1}
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">
                     {data._id === editId ? (
                       <>
                         <input
@@ -130,7 +201,7 @@ export const Track = () => {
                       data.batch
                     )}
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">
                     {data._id === editId ? (
                       <>
                         <input
@@ -145,11 +216,11 @@ export const Track = () => {
                       data.student_id.$numberLong
                     )}
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 ">
                     {data._id === editId ? (
                       <>
                         <input
-                          value={data.student_name || studentName}
+                          value={studentName}
                           onChange={(e) => setStudentName(e.target.value)}
                           type="text"
                           className="w-[150px] px-2 placeholder:text-sm text-sm text-black"
@@ -160,7 +231,7 @@ export const Track = () => {
                       data.student_name
                     )}
                   </td>
-                  <td className="text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                  <td className="text-sm text-gray-500 dark:text-gray-300">
                     {data._id === editId ? (
                       <>
                         <div className="flex leading-2">
@@ -207,7 +278,7 @@ export const Track = () => {
                       data.topic
                     )}
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 ">
                     {data._id === editId ? (
                       <>
                         <select
@@ -234,7 +305,7 @@ export const Track = () => {
                       data.advisor_name
                     )}
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                  <td className="w-[150px] px-4 py-4 text-sm text-gray-500 dark:text-gray-300">
                     {data._id === editId ? (
                       <>
                         <select
@@ -261,11 +332,11 @@ export const Track = () => {
                       data.co_advisor_name
                     )}
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 ">
                     {data._id === editId ? (
                       <>
                         <input
-                          value={term || data.term}
+                          value={term || data.semester}
                           onChange={(e) => setTerm(e.target.value)}
                           type="text"
                           className="w-[100px] px-2 placeholder:text-sm text-sm text-black"
@@ -276,7 +347,7 @@ export const Track = () => {
                       data.semester
                     )}
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">
                     {data._id === editId ? (
                       <>
                         <input
@@ -317,7 +388,7 @@ export const Track = () => {
                     {data._id === editId ? (
                       <>
                         <button
-                          onClick={(e) => updateData(e, data.id)}
+                          onClick={(e) => updateData(e, data._id)}
                           className="flex justify-center items-center h-6 px-2 ml-4 rounded font-semibold text-blue-100  text-[12px] bg-blue-600  hover:bg-blue-800"
                         >
                           Update
@@ -330,6 +401,7 @@ export const Track = () => {
             </tbody>
           </table>
         </div>
+        <ToastContainer />
       </div>
     </>
   );

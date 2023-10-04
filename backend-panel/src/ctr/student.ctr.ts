@@ -12,6 +12,7 @@ class StudentCtr {
   }
 
   public async addStudent(body: IAddStudentRequest): Promise<any> {
+    console.log(body)
     if (!/^(TH|LS)$/.test(body.type) || !body) {
       return {
         data: {},

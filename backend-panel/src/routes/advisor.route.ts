@@ -4,7 +4,7 @@ const router = Router()
 
 router.get('/', async (req: Request, res: Response) => {
     const advisorCtr = new AdvisorCtr()
-    const result = await advisorCtr.getAdvisor(req.query)
+    const result = await advisorCtr.getAdvisor(req.body)
     res.json(result)
 })
 
