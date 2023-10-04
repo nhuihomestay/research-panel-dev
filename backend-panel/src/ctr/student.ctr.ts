@@ -2,9 +2,9 @@ import { StudentDaos, AdvisorDaos } from '@daos';
 import { lowerCase } from 'lodash';
 
 class StudentCtr {
-  public async getStudent(query: any): Promise<any> {
+  public async getStudent(body: any): Promise<any> {
     const studentDaos = new StudentDaos()
-    const data = await studentDaos.queryStudent(query ? query : {})
+    const data = await studentDaos.queryStudent(body ? body : {})
     return {
       data: data,
       devMessage: "Success",
