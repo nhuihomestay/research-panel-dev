@@ -97,7 +97,7 @@ class StudentCtr {
         devMessage: "Dupplicated student_name"
       }
     }
-    await studentDaos.updateStudent({ student_id: body.student_id }, {
+    await studentDaos.updateStudent({ _id: body.student_id }, {
       $set: updatedField
     })
 
