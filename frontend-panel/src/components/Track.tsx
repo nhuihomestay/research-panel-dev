@@ -106,7 +106,9 @@ export const Track = () => {
     const studentData: any = {};
 
     studentData.student_id = String(student_id);
+
     // if (studentId !== "") studentData.new_student_id = studentId;
+
     if (studentName !== "") studentData.student_name = studentName;
     if (type !== "") studentData.type = type;
     if (topic !== "") studentData.topic = topic;

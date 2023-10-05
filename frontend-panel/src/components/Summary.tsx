@@ -13,18 +13,42 @@ export const Summary = () => {
     second: "numeric",
     hour12: false,
   };
+
   const currentDateTime = new Intl.DateTimeFormat("th-TH", options).format(
     currentDate
   );
+  
   const [advisors, setAdvisors] = useState<string>();
   const { data }: any = useContext(DataContext);
   console.log(data);
   const foundItems = data.filter(
     (item: any) => item.advisor_name && item.advisor_name.includes(advisors)
   );
-
+  const foundItemsCo = data.filter(
+    (item: any) =>
+      item.co_advisor_name && item.co_advisor_name.includes(advisors)
+  );
+  console.log(foundItemsCo);
   console.log(foundItems);
   console.log(advisors);
+
+  const result: any[] = [];
+  foundItems.map((item: any) => {
+    result.push(item.type);
+    return item.type;
+  });
+  console.log(`type ${result}`);
+
+  const joinedString = result.join(",");
+  const parts = joinedString.split(",");
+  const counts: Record<string, number> = {};
+
+  for (const part of parts) {
+    const key = part.trim().toLowerCase(); // เปลี่ยนเป็นตัวพิมพ์เล็กและตัดช่องว่าง
+    counts[key] = (counts[key] || 0) + 1;
+  }
+  const th = counts["th"];
+  const is = counts["is"];
 
   const advisorData = [
     { advisor: "ดร.ธัญญรัตน์" },
@@ -66,7 +90,7 @@ export const Summary = () => {
           ข้อมูลวันที่ {currentDateTime}
         </p>
         <div className="">
-          <table className="mx-auto divide-y-2 divide-gray-500">
+          <table className="w-full lg:w-[1200px] mx-auto divide-y-2 divide-gray-500">
             <thead className="bg-[#C9DDFF]">
               <tr>
                 <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
@@ -87,9 +111,6 @@ export const Summary = () => {
                 <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
                   Co-Advisor
                 </th>
-                <th className="w-[200px]  px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
-                  LookReal
-                </th>
                 <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
                   Remark
                 </th>
@@ -105,7 +126,69 @@ export const Summary = () => {
                   <td>{item.type}</td>
                   <td>{item.advisor_name}</td>
                   <td>{item.co_advisor_name}</td>
-                  <td>{item.semester}</td>
+                  <td>{item.remark}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <table className="mx-auto my-5">
+          <thead className="bg-[#5180e6]">
+            <tr>
+              <th className="w-[150px]">ประเภท</th>
+              <th className="w-[50px]">รวม</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y text-center">
+            <tr>
+              <td>วิทยานิพนธ์</td>
+              <td>{th}</td>
+            </tr>
+            <tr className="">
+              <td>การค้นคว้าอิสระ</td>
+              <td>{is}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div className="">
+          <table className="w-full lg:w-[1200px] mx-auto divide-y-2 divide-gray-500">
+            <thead className="bg-[#C9DDFF]">
+              <tr>
+                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                  No.
+                </th>
+                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500 ">
+                  ID
+                </th>
+                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                  Name
+                </th>
+                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                  Type
+                </th>
+                <th className="w-[150px] px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                  Advisor
+                </th>
+                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                  Co-Advisor
+                </th>
+                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                  Remark
+                </th>
+              </tr>
+            </thead>
+
+            <tbody className="bg-white divide-y divide-gray-200 text-center">
+              {foundItemsCo.map((item: any, index: any) => (
+                <tr className="">
+                  <td className="">{index + 1}</td>
+                  <td>{item.student_id.$numberLong}</td>
+                  <td>{item.student_name}</td>
+                  <td>{item.type}</td>
+                  <td>{item.advisor_name}</td>
+                  <td>{item.co_advisor_name}</td>
                   <td>{item.remark}</td>
                 </tr>
               ))}
