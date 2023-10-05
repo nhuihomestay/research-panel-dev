@@ -21,6 +21,12 @@ class AdvisorDaos {
     const data = connect.updateById(DATABASE_NAME.DEV_DB, COLLECTION_NAME.ADVISOR_TEST, id, option)
     return data
   }
+
+  public async groupBy(option: any): Promise<any> {
+    const connect = new MongosConnect();
+    const data = connect.countAgg(DATABASE_NAME.DEV_DB, COLLECTION_NAME.ADVISOR_TEST, option)
+    return data
+  }
 }
 
 export default AdvisorDaos;

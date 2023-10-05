@@ -20,4 +20,10 @@ router.put('/update', async (req: Request, res: Response) => {
     res.json(result)
 })
 
+router.get('/count', async (req: Request, res: Response) => {
+    const studentCtr = new StudentCtr()
+    const result = await studentCtr.groupStudent(req.body)
+    res.json(result)
+})
+
 export default router

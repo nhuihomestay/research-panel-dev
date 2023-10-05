@@ -52,7 +52,7 @@ class AdvisorCtr {
 
     const updateAdvisor = await advisorDaos.updateAdvisor({ advisor_name: body.advisor_name }, {
       $inc: {
-        [`${lowerCase(queryStudent[0].type)}_count`]: 1 
+        [`${lowerCase(queryStudent[0].type)}_count`]: 1
       },
       $set: {
         updated_at: new Date(Date.now()).toISOString()
@@ -75,6 +75,24 @@ class AdvisorCtr {
 
     return {
       data: {},
+      devMessage: "Success",
+    };
+  }
+
+  public async groupAdvisor(): Promise<any> {
+    const advisorDaos = new AdvisorDaos()
+    const pipeline: any[] = [
+      {
+        $group: {
+          _id: null,
+          count: { $sum: 1 }
+        }
+      }]
+    const getData = await advisorDaos.groupBy(pipeline)
+    return {
+      data: {
+        total_advisor: getData[0].count
+      },
       devMessage: "Success",
     };
   }

@@ -52,15 +52,6 @@ class StudentCtr {
       created_at: new Date(Date.now()).toISOString(),
       updated_at: new Date(Date.now()).toISOString()
     })
-    // await advisorDaos.updateAdvisor(
-    //   {
-    //     advisor_name: { $in: [body.advisor_name, body.co_advisor_name] }
-    //   },
-    //   {
-    //     $inc: { [`${lowerCase(body.type)}_count`]: 1 },
-    //     $set: { updated_at: new Date().toISOString() }
-    //   }
-    // );
 
     return {
       data: {},
@@ -104,7 +95,7 @@ class StudentCtr {
       $set: updatedField
     })
 
-    if (updatedData.modifiedCount > 0) {
+    if (updatedData.modifiedCount === 0) {
       return {
         data: {},
         devMessage: "Update database is incomplete"
@@ -113,6 +104,27 @@ class StudentCtr {
 
     return {
       data: updatedData,
+      devMessage: "Success",
+    };
+  }
+
+  public async groupStudent(body: any): Promise<any> {
+    const studentDaos = new StudentDaos()
+    const pipeline: any[] = []
+    if (body.match) pipeline.push({
+      $match: {
+        advisor_name: body.match
+      }
+    })
+    pipeline.push({
+      $group: {
+        _id: `${body.id ? '$' + body.id : null}`,
+        count: { $sum: 1 }
+      }
+    })
+    const getData = await studentDaos.groupBy(pipeline)
+    return {
+      data: getData,
       devMessage: "Success",
     };
   }

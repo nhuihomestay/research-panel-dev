@@ -60,6 +60,25 @@ class MongosConnect {
             client.close()
         }
     }
+
+    public async countAgg(db: string, collection: string, option: any): Promise<any> {
+        const client = new MongoClient(process.env.DATABASE_ENV || '');
+        try {
+            await client.connect()
+            const selectDB = client.db(db)
+            const data = selectDB.collection(collection).aggregate(option)
+            const response: any[] = []
+            await data.forEach((result: any) => {
+                response.push(result)
+            })
+            return response
+        } catch (err: any) {
+            console.log(err);
+            return null
+        } finally {
+            client.close()
+        }
+    }
 }
 
 
