@@ -7,7 +7,7 @@ import BaseRouter from './routes';
 // import bodyParser from 'body-parser'
 
 const app = express();
-app.use((req, res, next) => {
+app.use((req: any, res: any, next: any) => {
     res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
