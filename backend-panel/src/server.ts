@@ -6,7 +6,6 @@ import path from 'path';
 import BaseRouter from './routes';
 
 const app = express();
-console.log((process.env.ENDPOINT_ENV || '') + (process.env.PORT || ''))
 app.use((req: any, res: any, next: any) => {
     res.header('Access-Control-Allow-Origin', (process.env.ENDPOINT_ENV || '') + (process.env.PORT || ''));
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');

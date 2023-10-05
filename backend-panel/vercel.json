@@ -6,6 +6,6 @@
     }],
     "routes": [{
         "src": "/api/(.*)",
-        "dest": "src/route/index.ts"
+        "dest": "src/routes/index.ts"
     }]
 }
