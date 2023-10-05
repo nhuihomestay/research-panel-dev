@@ -4,9 +4,9 @@
         "src": "server.ts",
         "use": "@vercel/node"
     }],
-    "routes": [{
-        "src": "/(.*)",
-        "dest": "/server.ts"
+    "rewrites": [{
+        "source": "/api/(.*)",
+        "destination": "/api"
     }],
     "env": {
         "NODE_ENV": "prod"
