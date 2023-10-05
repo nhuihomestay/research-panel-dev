@@ -49,6 +49,7 @@ class StudentCtr {
       semester: body.semester,
       batch: body.batch,
       remark: body.remark,
+      is_graduated: body.is_graduated ? body.is_graduated : false,
       created_at: new Date(Date.now()).toISOString(),
       updated_at: new Date(Date.now()).toISOString()
     })
