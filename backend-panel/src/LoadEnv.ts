@@ -7,13 +7,13 @@ const options = commandLineArgs([
     {
         name: 'env',
         alias: 'e',
-        defaultValue: 'production',
+        defaultValue: 'prod',
         type: String,
     }
 ])
 
 const result = dotenv.config({
-    path: `./env/dev.env`,
+    path: `./env/${options.env}.env`,
 })
 
 const schema = {
@@ -31,6 +31,8 @@ if (!valid) {
     const verifyENVFail = validate.errors[0].message
     throw new Error(verifyENVFail)
 }
+
+console.log(`Validate env file Success`)
 
 if (result.error) {
     throw result.error
