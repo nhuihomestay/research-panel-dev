@@ -5,16 +5,7 @@
         "use": "@vercel/node"
     }],
     "routes": [{
-            "src": "/api/advisor/.*",
-            "dest": "src/index.ts"
-        },
-        {
-            "src": "/api/student/.*",
-            "dest": "src/index.ts"
-        },
-        {
-            "src": "/(.*)",
-            "dest": "src/index.ts"
-        }
-    ]
+        "src": "/(.*)",
+        "dest": "src/index.ts"
+    }]
 }
