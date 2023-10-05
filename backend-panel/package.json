@@ -4,6 +4,7 @@
     "description": "",
     "main": "server.js",
     "scripts": {
+        "build": "node ./util/build.js",
         "start": "node -r module-alias/ctr ./dist",
         "start:dev": "nodemon --config nodemon.json --env=dev",
         "start:prod": "nodemon --config nodemon.json --env=prod",
