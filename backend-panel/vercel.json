@@ -6,11 +6,11 @@
     }],
     "routes": [{
             "src": "/api/advisor/.*",
-            "dest": "src/routes/advisor.route.ts"
+            "dest": "src/index.ts"
         },
         {
             "src": "/api/student/.*",
-            "dest": "src/routes/student.route.ts"
+            "dest": "src/index.ts"
         },
         {
             "src": "/(.*)",
