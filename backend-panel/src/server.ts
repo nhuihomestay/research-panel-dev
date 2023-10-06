@@ -40,6 +40,10 @@ app.use(expressAutosanitizer.all);
 
 app.use('/api', BaseRouter);
 
+app.get('/ping', (_req: Request, res: Response) => {
+    return res.send('pong 🏓')
+})
+
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     return res.json({
         error: err.message,
