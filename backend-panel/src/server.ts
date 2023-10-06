@@ -5,6 +5,7 @@ import expressAutosanitizer from 'express-autosanitizer';
 import path from 'path';
 import BaseRouter from './routes';
 import helmet from 'helmet'
+import cors from 'cors';
 
 const app = express();
 app.use((req: any, res: any, next: any) => {
@@ -12,6 +13,8 @@ app.use((req: any, res: any, next: any) => {
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
 });
+
+app.use(cors())
 
 if (process.env.NODE_ENV === 'prod') {
     app.use(helmet())
