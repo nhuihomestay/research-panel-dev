@@ -6,6 +6,6 @@
     }],
     "rewrites": [{
         "source": "/(.*)",
-        "dest": "/api"
+        "destination": "/api"
     }]
 }
