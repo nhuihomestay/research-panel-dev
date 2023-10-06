@@ -19,9 +19,11 @@ const result = dotenv.config({
 const schema = {
     type: "object",
     properties: {
-        DATABASE_ENV: { type: "string" }
+        DATABASE_ENV: { type: "string" },
+        ENDPOINT_ENV: { type: "string" },
+        PORT: { type: "string" }
     },
-    required: ['DATABASE_ENV']
+    required: ['DATABASE_ENV', 'ENDPOINT_ENV', 'PORT']
 }
 
 const validate: any = ajv.compile(schema)
