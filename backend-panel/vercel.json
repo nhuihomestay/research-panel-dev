@@ -4,8 +4,8 @@
         "src": "src/index.ts",
         "use": "@vercel/node"
     }],
-    "routes": [{
+    "rewrites": [{
         "src": "/(.*)",
-        "dest": "src/index.ts"
+        "dest": "/api"
     }]
 }
