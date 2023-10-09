@@ -25,9 +25,9 @@ router.put('/update', async (req: Request, res: Response) => {
 })
 
 router.get('/count', async (req: Request, res: Response) => {
-    log.warn('countStudent req:', req.body)
+    log.warn('countStudent req:', req.query)
     const studentCtr = new StudentCtr()
-    const result = await studentCtr.groupStudent(req.body)
+    const result = await studentCtr.groupStudent(req.query)
     res.json(result)
 })
 
