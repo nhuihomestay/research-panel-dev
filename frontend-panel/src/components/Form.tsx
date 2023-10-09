@@ -1,16 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 
-const advisorData = [
-  { advisor: "ดร.ธัญญรัตน์" },
-  { advisor: "ดร.คงศักดิ์" },
-  { advisor: "ดร.อารีรัตน์" },
-  { advisor: "ดร.นปภา" },
-  { advisor: "ดร.อภิรดา" },
-  { advisor: "ดร.วิภัสสร" },
-  { advisor: "ดร.นันทวัน" },
-];
+// const advisorData = [
+//   { advisor: "ดร.ธัญญรัตน์" },
+//   { advisor: "ดร.คงศักดิ์" },
+//   { advisor: "ดร.อารีรัตน์" },
+//   { advisor: "ดร.นปภา" },
+//   { advisor: "ดร.อภิรดา" },
+//   { advisor: "ดร.วิภัสสร" },
+//   { advisor: "ดร.นันทวัน" },
+// ];
 
 export const Form = () => {
   const [batch, setBatch] = useState("");
@@ -24,6 +24,8 @@ export const Form = () => {
   const [grade, setGrade] = useState("");
   const [remark, setRemark] = useState("");
   const [change, setChange] = useState(true);
+  const [advisorData, setAdvisorData] = useState([]);
+  const [active, setActive] = useState(false);
 
   const isValidate = () => {
     let proceed = true;
@@ -65,7 +67,7 @@ export const Form = () => {
     if (isValidate()) {
       try {
         const response = await axios.post(
-          `http://localhost:3000/api/student/add`,
+          `https://app-research-panel.onrender.com/api/student/add`,
           {
             student_id: studentId,
             batch: batch,
@@ -94,10 +96,9 @@ export const Form = () => {
 
   const saveDataAD = async (e: any) => {
     e.preventDefault();
-
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/advisor/add`,
+        `https://app-research-panel.onrender.com/api/advisor/add`,
         {
           advisor_name: advisor,
         }
@@ -114,6 +115,24 @@ export const Form = () => {
       toast.error("Failed: " + err.message);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "https://app-research-panel.onrender.com/api/advisor"
+        );
+        setAdvisorData(response.data.data);
+        // console.log(advisorData);
+        setActive(true);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    if (!active) {
+      fetchData();
+    }
+  }, [active]);
 
   // send data student
   // const saveData = (e: any) => {
@@ -180,7 +199,7 @@ export const Form = () => {
                 <input
                   value={batch}
                   onChange={(e) => setBatch(e.target.value)}
-                  type="text"
+                  type="number"
                   className="w-full px-2 rounded-r-lg placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-[#8278d9] focus:border-transparent ring-1 ring-inset ring-[#8278d9]"
                   placeholder="BATCH"
                 />
@@ -263,15 +282,19 @@ export const Form = () => {
                     Please Select Advisor
                   </option>
 
-                  {advisorData.map((data, key) => (
-                    <option
-                      className="text-[#131c85]"
-                      value={data.advisor}
-                      key={key}
-                    >
-                      {data.advisor}
-                    </option>
-                  ))}
+                  {advisorData.length === 0 ? (
+                    <div>Error</div>
+                  ) : (
+                    advisorData.map((data: any, key) => (
+                      <option
+                        className="text-[#131c85]"
+                        value={data.advisor_name}
+                        key={key}
+                      >
+                        {data.advisor_name}
+                      </option>
+                    ))
+                  )}
                 </select>
               </div>
 
@@ -291,13 +314,13 @@ export const Form = () => {
                     Please Select Co-Advisor
                   </option>
 
-                  {advisorData.map((data, key) => (
+                  {advisorData.map((data: any, key) => (
                     <option
                       className="text-[#131c85]"
-                      value={data.advisor}
+                      value={data.advisor_name}
                       key={key}
                     >
-                      {data.advisor}
+                      {data.advisor_name}
                     </option>
                   ))}
                 </select>

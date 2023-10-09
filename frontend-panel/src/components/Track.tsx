@@ -3,15 +3,15 @@ import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 
-const advisorData = [
-  { advisor: "ดร.ธัญญรัตน์" },
-  { advisor: "ดร.คงศักดิ์" },
-  { advisor: "ดร.อารีรัตน์" },
-  { advisor: "ดร.นปภา" },
-  { advisor: "ดร.อภิรดา" },
-  { advisor: "ดร.วิภัสสร" },
-  { advisor: "ดร.นันทวัน" },
-];
+// const advisorData = [
+//   { advisor: "ดร.ธัญญรัตน์" },
+//   { advisor: "ดร.คงศักดิ์" },
+//   { advisor: "ดร.อารีรัตน์" },
+//   { advisor: "ดร.นปภา" },
+//   { advisor: "ดร.อภิรดา" },
+//   { advisor: "ดร.วิภัสสร" },
+//   { advisor: "ดร.นันทวัน" },
+// ];
 
 export const Track = () => {
   const [batch, setbatch] = useState<string>("");
@@ -26,6 +26,10 @@ export const Track = () => {
   const [remark, setRemark] = useState("");
   const [editId, setEditId] = useState(0);
   const [data, setData] = useState([]);
+  const [advisorData, setAdvisorData] = useState([]);
+  const [is_graduated, setIs_graduated] = useState(false);
+  const [active, setActive] = useState(false);
+  const [activeS, setActiveS] = useState(false);
   // const { data }: any = useContext(DataContext);
 
   const isValidate = (advisor_name: any, co_advisor_name: any) => {
@@ -53,6 +57,7 @@ export const Track = () => {
   };
 
   // const updateData = (e: any, id: any) => {
+
   //   e.preventDefault();
   //   if (isValidate()) {
   //     const advisorData = {
@@ -83,18 +88,42 @@ export const Track = () => {
   //         grade: grade,
   //         remark: remark,
 
+  // useEffect(() => {
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchDataSd = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/student/");
+        const response = await axios.get(
+          "https://app-research-panel.onrender.com/api/student"
+        );
         setData(response.data.data);
-        console.log(`Data na ka : ${data}`);
+        setActiveS(true);
+        // console.log(`Student : ${data}`);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-    fetchData();
-  });
+    if (!activeS) {
+      fetchDataSd();
+    }
+  }, [activeS]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "https://app-research-panel.onrender.com/api/advisor"
+        );
+        setAdvisorData(response.data.data);
+        setActive(true);
+        // console.log(`Advisor : ${advisorData}`);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    if (!active) {
+      fetchData();
+    }
+  }, [active]);
 
   const updateData = async (
     e: any,
@@ -104,11 +133,8 @@ export const Track = () => {
   ) => {
     e.preventDefault();
     const studentData: any = {};
-
     studentData.student_id = String(student_id);
-
     // if (studentId !== "") studentData.new_student_id = studentId;
-
     if (studentName !== "") studentData.student_name = studentName;
     if (type !== "") studentData.type = type;
     if (topic !== "") studentData.topic = topic;
@@ -120,12 +146,13 @@ export const Track = () => {
     if (batch !== "") studentData.batch = batch;
     if (remark !== "") studentData.remark = remark;
     if (term !== "") studentData.semester = term;
+    if (is_graduated !== false) studentData.is_graduated = is_graduated;
 
-    console.log(studentData);
+    // console.log(studentData);
 
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/student/update`,
+        `https://app-research-panel.onrender.com/api/student/update`,
         studentData
       );
 
@@ -135,16 +162,16 @@ export const Track = () => {
       if (response.status === 200) {
         toast.success("Update successfully.");
       }
-      // setbatch("");
+      setbatch("");
       // setStudentId("");
-      // setStudentName("");
-      // setType("");
-      // setTopic("");
-      // setAdvisor("");
-      // setCoAdvisor("");
-      // setTerm("");
-      // setGrade("");
-      // setRemark("");
+      setStudentName("");
+      setType("");
+      setTopic("");
+      setAdvisor("");
+      setCoAdvisor("");
+      setTerm("");
+      setGrade("");
+      setRemark("");
       // setEditId(null);
     } catch (err: any) {
       toast.error("Failed: " + err.message);
@@ -191,6 +218,9 @@ export const Track = () => {
                 </th>
                 <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
                   Remark
+                </th>
+                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                  Graduated
                 </th>
                 <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
                   Edit
@@ -299,13 +329,13 @@ export const Track = () => {
                             Select
                           </option>
 
-                          {advisorData.map((data, key) => (
+                          {advisorData.map((data: any, key) => (
                             <option
                               className="text-[#131c85]"
-                              value={data.advisor}
+                              value={data.advisor_name}
                               key={key}
                             >
-                              {data.advisor}
+                              {data.advisor_name}
                             </option>
                           ))}
                         </select>
@@ -327,13 +357,13 @@ export const Track = () => {
                             Select
                           </option>
 
-                          {advisorData.map((data, key) => (
+                          {advisorData.map((data: any, key) => (
                             <option
                               className="text-[#131c85]"
-                              value={data.advisor}
+                              value={data.advisor_name}
                               key={key}
                             >
-                              {data.advisor}
+                              {data.advisor_name}
                             </option>
                           ))}
                         </select>
@@ -387,6 +417,32 @@ export const Track = () => {
                       data.remark
                     )}
                   </td>
+
+                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                    {data._id === editId ? (
+                      <>
+                        <select
+                          value={data.is_graduated || is_graduated}
+                          name="type"
+                          onChange={(e: any) => setIs_graduated(e.target.value)}
+                          className="w-[40px] appearance-none px-2 text-black focus:outline-none focus:ring-2 focus:ring-[#8278d9] focus:border-transparent ring-1 ring-inset ring-[#8278d9]"
+                        >
+                          <option
+                            className="text-[#131c85] placeholder-black "
+                            value="true"
+                          >
+                            True
+                          </option>
+                          <option className="text-[#131c85]" value="false">
+                            False
+                          </option>
+                        </select>
+                      </>
+                    ) : (
+                      data.is_graduated.toString()
+                    )}
+                  </td>
+
                   <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300  flex">
                     <button
                       className="flex justify-center items-center h-6 px-5 ml-4 bg-yellow-600 rounded font-semibold text-blue-100 hover:bg-yellow-300 text-[12px]"

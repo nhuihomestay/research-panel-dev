@@ -1,5 +1,7 @@
-import { useState, useContext } from "react";
-import { DataContext } from "../Context";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
+// import { DataContext } from "../Context";
 
 export const Summary = () => {
   const currentDate = new Date();
@@ -17,20 +19,64 @@ export const Summary = () => {
   const currentDateTime = new Intl.DateTimeFormat("th-TH", options).format(
     currentDate
   );
-  
-  const [advisors, setAdvisors] = useState<string>();
-  const { data }: any = useContext(DataContext);
-  console.log(data);
-  const foundItems = data.filter(
-    (item: any) => item.advisor_name && item.advisor_name.includes(advisors)
+
+  // const [advisors, setAdvisors] = useState<string>();
+  // const { data }: any = useContext(DataContext);
+  const [advisorData, setAdvisorData] = useState([]);
+  const [dataStudent, setDataStudent] = useState([]);
+  const [active, setActive] = useState(false);
+  const [activeS, setActiveS] = useState(false);
+  const [advisor, setAdvisor] = useState();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "https://app-research-panel.onrender.com/api/advisor"
+        );
+        setAdvisorData(response.data.data);
+        setActive(true);
+      } catch (error) {
+        console.error("Error fetching advisor data:", error);
+      }
+    };
+
+    if (!active) {
+      fetchData();
+    }
+  }, [active]);
+
+  useEffect(() => {
+    const fetchDataSd = async () => {
+      try {
+        const response = await axios.get(
+          "https://app-research-panel.onrender.com/api/student"
+        );
+        setDataStudent(response.data.data);
+        setActiveS(true);
+      } catch (error) {
+        console.error("Error fetching student data:", error);
+      }
+    };
+
+    if (!activeS) {
+      fetchDataSd();
+    }
+  }, [activeS]);
+
+  console.log(advisorData);
+  console.log(dataStudent);
+
+  const foundItems = dataStudent.filter(
+    (item: any) => item.advisor_name && item.advisor_name.includes(advisor)
   );
-  const foundItemsCo = data.filter(
+  const foundItemsCo = dataStudent.filter(
     (item: any) =>
-      item.co_advisor_name && item.co_advisor_name.includes(advisors)
+      item.co_advisor_name && item.co_advisor_name.includes(advisor)
   );
-  console.log(foundItemsCo);
+
   console.log(foundItems);
-  console.log(advisors);
+  console.log(foundItemsCo);
 
   const result: any[] = [];
   foundItems.map((item: any) => {
@@ -44,47 +90,42 @@ export const Summary = () => {
   const counts: Record<string, number> = {};
 
   for (const part of parts) {
-    const key = part.trim().toLowerCase(); // เปลี่ยนเป็นตัวพิมพ์เล็กและตัดช่องว่าง
+    const key = part.trim();
     counts[key] = (counts[key] || 0) + 1;
   }
-  const th = counts["th"];
-  const is = counts["is"];
-
-  const advisorData = [
-    { advisor: "ดร.ธัญญรัตน์" },
-    { advisor: "ดร.คงศักดิ์" },
-    { advisor: "ดร.อารีรัตน์" },
-    { advisor: "ดร.นปภา" },
-    { advisor: "ดร.อภิรดา" },
-    { advisor: "ดร.วิภัสสร" },
-    { advisor: "ดร.นันทวัน" },
-  ];
+  const th = counts["TH"];
+  const ls = counts["LS"];
+  console.log(`TH : ${th} and LS : ${ls}`)
 
   return (
     <>
       <div className="bg-gray-500 min-h-screen pt-[80px]">
         <h1 className="text-center mx-auto text-3xl py-5 text-white">
-          ภาระงานอาจารย์ที่ปรึกษาวิทยานิพนธ์และการค้นคว้าอิสระ ปีการศึกษา{" "}
+          ภาระงานอาจารย์ที่ปรึกษาวิทยานิพนธ์และการค้นคว้าอิสระ ปีการศึกษา
           {currentYear}
         </h1>
         <div className="text-white mx-auto flex justify-center">
           <select
-            value={advisors}
+            value={advisor}
             name="advisor"
-            onChange={(e) => setAdvisors(e.target.value)}
+            onChange={(e: any) => setAdvisor(e.target.value)}
             className="w-[100px] px-2 placeholder:text-sm text-sm text-black rounded-lg"
           >
             <option className="text-[#8085bb]" value="">
               Select
             </option>
 
-            {advisorData.map((data, key) => (
-              <option className="text-[#131c85]" value={data.advisor} key={key}>
-                {data.advisor}
+            {advisorData.map((data: any, key) => (
+              <option
+                className="text-[#131c85]"
+                value={data.advisor_name}
+                key={key}
+              >
+                {data.advisor_name}
               </option>
             ))}
           </select>
-          <h1 className="text-2xl mx-10">{advisors}</h1>
+          <h1 className="text-2xl mx-10">{advisor}</h1>
         </div>
         <p className="text-white mx-auto text-center text-xl my-3">
           ข้อมูลวันที่ {currentDateTime}
@@ -93,42 +134,46 @@ export const Summary = () => {
           <table className="w-full lg:w-[1200px] mx-auto divide-y-2 divide-gray-500">
             <thead className="bg-[#C9DDFF]">
               <tr>
-                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500 whitespace-nowrap">
                   No.
                 </th>
-                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500 ">
+                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500 whitespace-nowrap">
                   ID
                 </th>
-                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500 whitespace-nowrap">
                   Name
                 </th>
-                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500 whitespace-nowrap">
                   Type
                 </th>
-                <th className="w-[100px] px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500 whitespace-nowrap">
                   Advisor
                 </th>
-                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500 whitespace-nowrap">
                   Co-Advisor
                 </th>
-                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500 whitespace-nowrap">
                   Remark
                 </th>
               </tr>
             </thead>
 
             <tbody className="bg-white divide-y divide-gray-200 text-center">
-              {foundItems.map((item: any, index: any) => (
-                <tr className="">
-                  <td className="">{index + 1}</td>
-                  <td>{item.student_id.$numberLong}</td>
-                  <td>{item.student_name}</td>
-                  <td>{item.type}</td>
-                  <td>{item.advisor_name}</td>
-                  <td>{item.co_advisor_name}</td>
-                  <td>{item.remark}</td>
-                </tr>
-              ))}
+              {foundItems.length === 0 ? (
+                <div>No data</div>
+              ) : (
+                foundItems.map((item: any, index: any) => (
+                  <tr className="">
+                    <td className="">{index + 1}</td>
+                    <td>{item.student_id}</td>
+                    <td>{item.student_name}</td>
+                    <td>{item.type}</td>
+                    <td>{item.advisor_name}</td>
+                    <td>{item.co_advisor_name}</td>
+                    <td>{item.remark}</td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -147,7 +192,7 @@ export const Summary = () => {
             </tr>
             <tr className="">
               <td>การค้นคว้าอิสระ</td>
-              <td>{is}</td>
+              <td>{ls}</td>
             </tr>
           </tbody>
         </table>
@@ -181,17 +226,21 @@ export const Summary = () => {
             </thead>
 
             <tbody className="bg-white divide-y divide-gray-200 text-center">
-              {foundItemsCo.map((item: any, index: any) => (
-                <tr className="">
-                  <td className="">{index + 1}</td>
-                  <td>{item.student_id.$numberLong}</td>
-                  <td>{item.student_name}</td>
-                  <td>{item.type}</td>
-                  <td>{item.advisor_name}</td>
-                  <td>{item.co_advisor_name}</td>
-                  <td>{item.remark}</td>
-                </tr>
-              ))}
+              {foundItemsCo.length === 0 ? (
+                <div>No data</div>
+              ) : (
+                foundItemsCo.map((item: any, index: any) => (
+                  <tr className="">
+                    <td className="">{index + 1}</td>
+                    <td>{item.student_id}</td>
+                    <td>{item.student_name}</td>
+                    <td>{item.type}</td>
+                    <td>{item.advisor_name}</td>
+                    <td>{item.co_advisor_name}</td>
+                    <td>{item.remark}</td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

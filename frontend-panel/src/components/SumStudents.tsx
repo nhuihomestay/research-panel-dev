@@ -1,71 +1,166 @@
-import { useContext } from "react";
-import { DataContext } from "../Context";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export const SumStudents = () => {
+  const [sumBatch, setSumBatch] = useState([]);
+  const [dataStudent, setDataStudent] = useState([]);
+  const [active, setActive] = useState(false);
+  const [activeS, setActiveS] = useState(false);
 
-  const { data }: any = useContext(DataContext); // form mockdata 
-  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "https://app-research-panel.onrender.com/api/student/count",
+          {
+            params: {
+              id: "batch",
+            },
+          }
+        );
+        setSumBatch(response.data.data);
+        console.log(response.data.data);
+        setActive(true);
+      } catch (error) {
+        console.error("Error fetching advisor data:", error);
+      }
+    };
 
+    if (!active) {
+      fetchData();
+    }
+  }, [active]);
 
-  //for count batch
-  const batch7Count = data.filter(
-    (item: any) => item.batch === "รุ่นที่ 7"
-  ).length;
-  const batch8Count = data.filter(
-    (item: any) => item.batch === "รุ่นที่ 8"
-  ).length;
-  const batch9Count = data.filter(
-    (item: any) => item.batch === "รุ่นที่ 9"
-  ).length;
-  const batch10Count = data.filter(
-    (item: any) => item.batch === "รุ่นที่ 10"
-  ).length;
-  const sumAll = batch7Count + batch8Count + batch9Count + batch10Count;
+  useEffect(() => {
+    const fetchDataSd = async () => {
+      try {
+        const response = await axios.get(
+          "https://app-research-panel.onrender.com/api/student"
+        );
+        setDataStudent(response.data.data);
+        setActiveS(true);
+        // console.log(`Student : ${data}`);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    if (!activeS) {
+      fetchDataSd();
+    }
+  }, [activeS]);
 
-
-
-
+  const total = sumBatch.reduce((acc, item: any) => acc + item.count, 0);
+  console.log(total);
   return (
-    <div className="pt-40 ">
-      <table className="divide-y-2 ml-10 border-black">
-        <thead >
-          <tr >
-            <th className="">StudentId</th>
-            <th className="px-5">Batch</th>
-            <th>Name-Surname</th>
-            <th>TH/IS</th>
-            <th className="px-5">Advisor</th>
-            <th className="px-5">Co-Advisor</th>
-            <th>Look Really?</th>
-            <th>Remark</th>
-            
+    <div className="bg-black min-h-screen pt-[80px]">
+      <table className="mx-auto my-5">
+        <thead className="bg-[#5180e6]">
+          <tr>
+            <th className="w-[200px]" colSpan={2}>
+              จำนวนนักศึกษาทั้งหมด
+            </th>
+            {/* <th className="w-[50px]">รวม</th> */}
           </tr>
         </thead>
-        <tbody>
-          {data.map((item: any) => (
-            <tr key={item._id.$oid}>
-              <td>{item.student_id.$numberLong}</td>
-              <td className="px-5">{item.batch}</td>
-              <td>{item.student_name}</td>
-              <td>{item.type}</td>
-              <td>{item.advisor_name}</td>
-              <td>{item.co_advisor_name}</td>
-              <td>{item.semester}</td>
-              <td>{item.Remark}</td>{" "}
+        <tbody className="bg-white divide-y text-center">
+          {sumBatch.map((item: any) => (
+            <tr>
+              <td> รุ่นที่ {item._id}</td>
+              <td className="w-[50px] ">{item.count}</td>
             </tr>
           ))}
+          <tr className="bg-[#5baccc]">
+            <td className="font-bold">Total</td>
+            <td className="font-bold">{total}</td>
+          </tr>
         </tbody>
       </table>
 
-      <div className="ml-10 mt-10 mb-10">
-            <h2 className="font-bold">Total Student </h2>
-        <div className="">
-            <h3>รุ่นที่ 7 มีจำนวนทั้งหมด = {batch7Count}</h3>
-            <h3>รุ่นที่ 8 มีจำนวนทั้งหมด = {batch8Count}</h3>
-            <h3>รุ่นที่ 9 มีจำนวนทั้งหมด = {batch9Count}</h3>
-            <h3>รุ่นที่ 10 มีจำนวนทั้งหมด = {batch10Count}</h3>
-            <h2 className="font-bold">รวมมีจำนวนทั้งหมด = {sumAll}</h2>
-        </div>
+      <div className="">
+        <table className="mx-auto divide-y-2 divide-gray-500">
+          <thead className="bg-[#C9DDFF]">
+            <tr>
+              <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                No.
+              </th>
+              <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                Batch
+              </th>
+              <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500 ">
+                ID
+              </th>
+              <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                Name
+              </th>
+              <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                Type
+              </th>
+
+              <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                Advisor
+              </th>
+              <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                Co-Advisor
+              </th>
+
+              <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                Grade
+              </th>
+              <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                Remark
+              </th>
+              <th className="px-4 py-3.5 text-sm text-center rtl:text-right text-gray-500">
+                Graduated
+              </th>
+            </tr>
+          </thead>
+
+          <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+            {dataStudent.map((data: any, key: any) => (
+              <tr>
+                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">
+                  {key + 1}
+                </td>
+
+                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">
+                  รุ่นที่ {data.batch}
+                </td>
+
+                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">
+                  {data.student_id}
+                </td>
+
+                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">
+                  {data.student_name}
+                </td>
+
+                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">
+                  {data.type}
+                </td>
+
+                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">
+                  {data.advisor_name}
+                </td>
+
+                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">
+                  {data.co_advisor_name}
+                </td>
+
+                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">
+                  {data.grade}
+                </td>
+
+                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">
+                  {data.remark}
+                </td>
+
+                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300">
+                  {data.is_graduated.toString()}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
