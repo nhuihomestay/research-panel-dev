@@ -1,24 +1,18 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+// import moment from "moment";
 
 // import { DataContext } from "../Context";
 
 export const Summary = () => {
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear() + 543;
-  const options = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-    hour12: false,
-  };
-
-  const currentDateTime = new Intl.DateTimeFormat("th-TH", options).format(
-    currentDate
-  );
+  const currentYear = (new Date).getFullYear() + 543;
+  const currentDate: String = (new Date).toLocaleDateString('th-TH', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    weekday: 'long'
+  });
+  const currentTime: String = (new Date).toLocaleTimeString('th-TH')
 
   // const [advisors, setAdvisors] = useState<string>();
   // const { data }: any = useContext(DataContext);
@@ -64,8 +58,8 @@ export const Summary = () => {
     }
   }, [activeS]);
 
-  console.log(advisorData);
-  console.log(dataStudent);
+  // console.log(advisorData);
+  // console.log(dataStudent);
 
   const foundItems = dataStudent.filter(
     (item: any) => item.advisor_name && item.advisor_name.includes(advisor)
@@ -95,7 +89,7 @@ export const Summary = () => {
   }
   const th = counts["TH"];
   const ls = counts["LS"];
-  console.log(`TH : ${th} and LS : ${ls}`)
+  console.log(`TH : ${th} and LS : ${ls}`);
 
   return (
     <>
@@ -128,7 +122,7 @@ export const Summary = () => {
           <h1 className="text-2xl mx-10">{advisor}</h1>
         </div>
         <p className="text-white mx-auto text-center text-xl my-3">
-          ข้อมูลวันที่ {currentDateTime}
+          ข้อมูลวันที่ {currentDate} {currentTime}
         </p>
         <div className="">
           <table className="w-full lg:w-[1200px] mx-auto divide-y-2 divide-gray-500">
