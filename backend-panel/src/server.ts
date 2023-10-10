@@ -4,13 +4,31 @@ import 'express-async-errors';
 import expressAutosanitizer from 'express-autosanitizer';
 import path from 'path';
 import BaseRouter from './routes';
+// import cors from 'cors'
 
 const app = express();
 app.use((req: any, res: any, next: any) => {
-    res.header('Access-Control-Allow-Origin', (process.env.ENDPOINT_ENV || '') + (process.env.PORT || ''));
+    res.header('Access-Control-Allow-Origin', 'http:/localhost:5173/');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
 });
+
+// const allowedOrigins = [
+//     'http://localhost:5173', // เปลี่ยนเป็น URL ของเว็บแอปของคุณ
+//   ];
+  
+//   const corsOptions = {
+//     origin: (origin:any, callback:any) => {
+//       if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error('Not allowed by CORS'));
+//       }
+//     },
+//   };
+  
+//   app.use(cors(corsOptions));
+
 
 app.use(express.json({ limit: '10MB' }), (error: any, req: any, res: any, next: any) => {
     if (error instanceof SyntaxError) {

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { DataContext } from "../Context";
 import axios from "axios";
 
@@ -6,19 +6,22 @@ import axios from "axios";
 export const SumStudents = () => {
   const { data }: any = useContext(DataContext); // form mockdata
   
-
-  const batch = [];
-  for (const item of data) {
-    batch.push(item.batch);
+  async function getData() {
+    try {
+      const response = await axios.get('http://localhost:3000/api/student'
+      );
+      const Data = response.data;
+      console.log(Data.data)
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดในการดึงข้อมูลแบทช์:", error);
+    }
   }
-  const uniqueBatch = [...new Set(batch)];
-  const batchCounts = {};
-  console.log(uniqueBatch)
+  
+  // เรียกใช้ฟังก์ชันเมื่อคอมโพเนนต์ถูกโหลด
+  useEffect(() => {
+    getData();
+  }, []);
 
-  async function getBatch() {
-    axios.get('localhost:3000/api/student',)
-    
-  }
 
 
   return (
@@ -55,9 +58,6 @@ export const SumStudents = () => {
       <div className="ml-10 mt-10 mb-10">
         <h2 className="font-bold">Total Student </h2>
         <div className="">
-          {Object.entries(batchCounts).map(([batch, count]) => (
-            <h3 key={batch}>{`${batch}: ${count}`}</h3>
-          ))}
 
           <h2 className="font-bold">รวมมีจำนวนทั้งหมด = {}</h2>
         </div>
