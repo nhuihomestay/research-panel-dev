@@ -1,24 +1,30 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+// import moment from "moment";
 
 // import { DataContext } from "../Context";
 
 export const Summary = () => {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear() + 543;
-  const options = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-    hour12: false,
-  };
+  // const currentDateTime = new Intl.DateTimeFormat("th-TH", {
+  //   year: "numeric",
+  //   month: "long",
+  //   day: "numeric",
+  //   hour: "numeric",
+  //   minute: "numeric",
+  //   second: "numeric",
+  //   hour12: false,
+  // }).format(currentDate);
 
-  const currentDateTime = new Intl.DateTimeFormat("th-TH", options).format(
-    currentDate
-  );
+  // const thDate = moment().add(543, 'year')
+  const currentDateTime: String = currentDate.toLocaleDateString('th-TH', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    weekday: 'long'
+  });
+  // console.log(currentDateTime)
 
   // const [advisors, setAdvisors] = useState<string>();
   // const { data }: any = useContext(DataContext);
@@ -64,8 +70,8 @@ export const Summary = () => {
     }
   }, [activeS]);
 
-  console.log(advisorData);
-  console.log(dataStudent);
+  // console.log(advisorData);
+  // console.log(dataStudent);
 
   const foundItems = dataStudent.filter(
     (item: any) => item.advisor_name && item.advisor_name.includes(advisor)
@@ -95,7 +101,7 @@ export const Summary = () => {
   }
   const th = counts["TH"];
   const ls = counts["LS"];
-  console.log(`TH : ${th} and LS : ${ls}`)
+  console.log(`TH : ${th} and LS : ${ls}`);
 
   return (
     <>

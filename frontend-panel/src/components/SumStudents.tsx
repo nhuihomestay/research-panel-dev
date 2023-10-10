@@ -19,7 +19,7 @@ export const SumStudents = () => {
           }
         );
         setSumBatch(response.data.data);
-        console.log(response.data.data);
+        // console.log(response.data.data);
         setActive(true);
       } catch (error) {
         console.error("Error fetching advisor data:", error);
@@ -50,7 +50,7 @@ export const SumStudents = () => {
   }, [activeS]);
 
   const total = sumBatch.reduce((acc, item: any) => acc + item.count, 0);
-  console.log(total);
+  // console.log(total);
   return (
     <div className="bg-black min-h-screen pt-[80px]">
       <table className="mx-auto my-5">

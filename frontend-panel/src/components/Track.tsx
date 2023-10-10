@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 // import { DataContext } from "../Context";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";

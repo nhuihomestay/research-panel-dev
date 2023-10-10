@@ -81,8 +81,8 @@ export const Form = () => {
             remark: remark,
           }
         );
-        console.log(response);
-        console.log("PUT", response.status);
+        // console.log(response);
+        // console.log("PUT", response.status);
         if (response.status === 200) {
           toast.success("Update successfully.");
           // setReload(!reload);
@@ -103,14 +103,14 @@ export const Form = () => {
           advisor_name: advisor,
         }
       );
-      console.log(response);
-      console.log("PUT", response.status);
+      // console.log(response);
+      // console.log("PUT", response.status);
       if (response.status === 200) {
         toast.success("Update successfully.");
         // setReload(!reload);
       }
       // setEditId(null);
-      console.log(`test : ${response}`);
+      // console.log(`test : ${response}`);
     } catch (err: any) {
       toast.error("Failed: " + err.message);
     }
