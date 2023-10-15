@@ -109,17 +109,17 @@ class StudentCtr {
     };
   }
 
-  public async groupStudent(body: any): Promise<any> {
+  public async groupStudent(query: any): Promise<any> {
     const studentDaos = new StudentDaos()
     const pipeline: any[] = []
-    if (body.match) pipeline.push({
+    if (query.match) pipeline.push({
       $match: {
-        advisor_name: body.match
+        advisor_name: query.match
       }
     })
     pipeline.push({
       $group: {
-        _id: `${body.id ? '$' + body.id : null}`,
+        _id: `${query.id ? '$' + query.id : null}`,
         count: { $sum: 1 }
       }
     })
