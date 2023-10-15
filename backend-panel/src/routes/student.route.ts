@@ -31,4 +31,11 @@ router.get('/count', async (req: Request, res: Response) => {
     res.json(result)
 })
 
+router.delete('/delete', async (req: Request, res: Response) => {
+    log.warn('deleteStudent req:', req.query)
+    const studentCtr = new StudentCtr()
+    const result = await studentCtr.deleteStudent(req.body)
+    res.json(result)
+})
+
 export default router

@@ -2,9 +2,9 @@ import { StudentDaos, AdvisorDaos } from '@daos';
 import { lowerCase } from 'lodash';
 
 class StudentCtr {
-  public async getStudent(body: any): Promise<any> {
+  public async getStudent(query: any): Promise<any> {
     const studentDaos = new StudentDaos()
-    const data = await studentDaos.queryStudent(body ? body : {})
+    const data = await studentDaos.queryStudent(query ? query : {})
     return {
       data: data,
       devMessage: "Success",
@@ -78,7 +78,7 @@ class StudentCtr {
     if (body.grade) updatedField.grade = body.grade
     if (body.semester) updatedField.semester = body.semester
     if (body.batch) updatedField.batch = body.batch
-    if (body.is_graduated) updatedField.is_graduated = body.is_graduated
+    if (body.is_graduated) updatedField.is_graduated = String(body.is_graduated)
     updatedField.updated_at = new Date(Date.now()).toISOString()
 
     const studentDaos = new StudentDaos()
@@ -124,6 +124,31 @@ class StudentCtr {
       }
     })
     const getData = await studentDaos.groupBy(pipeline)
+    return {
+      data: getData,
+      devMessage: "Success",
+    };
+  }
+
+  public async deleteStudent(body: any): Promise<any> {
+    const studentDaos = new StudentDaos()
+    console.log(body)
+    const getData = await studentDaos.queryStudent({ student_id: body.student_id, is_graduated: 'true' })
+    console.log(getData)
+    if (getData.length === 0) {
+      return {
+        data: {},
+        devMessage: "Student not found"
+      }
+    }
+    const updatedData = await studentDaos.delStudent({ student_id: body.student_id })
+    if (updatedData.modifiedCount === 0) {
+      return {
+        data: {},
+        devMessage: "Update database is incomplete"
+      }
+    }
+
     return {
       data: getData,
       devMessage: "Success",

@@ -2,9 +2,9 @@ import { AdvisorDaos, StudentDaos } from '@daos';
 import { lowerCase } from 'lodash';
 
 class AdvisorCtr {
-  public async getAdvisor(body: any): Promise<any> {
+  public async getAdvisor(query: any): Promise<any> {
     const advisorDaos = new AdvisorDaos()
-    const data = await advisorDaos.queryAdvisor(body ? body : {})
+    const data = await advisorDaos.queryAdvisor(query ? query : {})
     return {
       data: data,
       devMessage: "Success",
@@ -93,6 +93,29 @@ class AdvisorCtr {
       data: {
         total_advisor: getData[0].count
       },
+      devMessage: "Success",
+    };
+  }
+
+  public async deleteAdvisor(body: any): Promise<any> {
+    const advisorDaos = new AdvisorDaos()
+    const getData = await advisorDaos.queryAdvisor({ _id: body.id })
+    if (getData.length === 0) {
+      return {
+        data: {},
+        devMessage: "Advisor not found"
+      }
+    }
+    const updatedData = await advisorDaos.delAdvisor({ _id: body.id })
+    if (updatedData.modifiedCount === 0) {
+      return {
+        data: {},
+        devMessage: "Update database is incomplete"
+      }
+    }
+
+    return {
+      data: getData,
       devMessage: "Success",
     };
   }

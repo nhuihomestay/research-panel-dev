@@ -30,4 +30,11 @@ router.get('/total', async (req: Request, res: Response) => {
     res.json(result)
 })
 
+router.delete('/delete', async (req: Request, res: Response) => {
+    log.warn('deleteAdvisor req:', req.query)
+    const advisorCtr = new AdvisorCtr()
+    const result = await advisorCtr.deleteAdvisor(req.body)
+    res.json(result)
+})
+
 export default router

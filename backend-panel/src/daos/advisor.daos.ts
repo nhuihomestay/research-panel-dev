@@ -35,6 +35,12 @@ class AdvisorDaos {
     const data = connect.countAgg(devDB, colName, option)
     return data
   }
+
+  public async delAdvisor(id: any): Promise<any> {
+    const connect = new MongosConnect();
+    const data = connect.delById(devDB, colName, id)
+    return data
+  }
 }
 
 export default AdvisorDaos;

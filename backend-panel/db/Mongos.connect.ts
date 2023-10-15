@@ -79,6 +79,21 @@ class MongosConnect {
             client.close()
         }
     }
+
+    public async delById(db: string, collection: string, id: any): Promise<any> {
+        const client = new MongoClient(process.env.DATABASE_ENV || '');
+        try {
+            await client.connect()
+            const selectDB = client.db(db)
+            const data = selectDB.collection(collection).deleteOne(id)
+            return data
+        } catch (err: any) {
+            console.log(err);
+            return null
+        } finally {
+            client.close()
+        }
+    }
 }
 
 
