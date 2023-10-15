@@ -4,9 +4,9 @@ import log from 'loglevel';
 const router = Router()
 
 router.get('/', async (req: Request, res: Response) => {
-    log.warn('getAdvisor req:', req.body)
+    log.warn('getAdvisor req:', req.query)
     const advisorCtr = new AdvisorCtr()
-    const result = await advisorCtr.getAdvisor(req.body)
+    const result = await advisorCtr.getAdvisor(req.query)
     res.json(result)
 })
 
