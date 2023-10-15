@@ -2,7 +2,7 @@ import { MongosConnect } from "@db/Mongos.connect"
 import { DATABASE_NAME, COLLECTION_NAME } from "src/constant/db.constant";
 let devDB = ''
 let colName = ''
-if (process.env.NODE_ENV !== 'prod') {
+if (process.env.NODE_ENV === 'dev') {
   devDB = DATABASE_NAME.DEV_DB,
     colName = COLLECTION_NAME.STUDENT_TEST
 } else {
