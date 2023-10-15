@@ -6,7 +6,7 @@ class MongosConnect {
         try {
             await client.connect()
             const selectDB = client.db(db)
-            const data = await selectDB.collection(collection).find(option).limit(10).toArray()
+            const data = await selectDB.collection(collection).find(option).toArray()
             return data
         } catch (err: any) {
             console.log(err);

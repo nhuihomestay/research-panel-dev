@@ -1,8 +1,11 @@
 {
+<<<<<<< HEAD
+=======
     "routes": [{
         "src": "/(.*)",
         "dest": "/src"
     }],
+>>>>>>> f2fb3ecbb6ba92f84936cdb6096d829ec37a72fe
     "rewrites": [{
         "source": "/(.*)",
         "destination": "/src"
