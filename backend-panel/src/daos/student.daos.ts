@@ -12,7 +12,6 @@ if (process.env.NODE_ENV !== 'prod') {
 class StudentDaos {
   public async queryStudent(option: any): Promise<any> {
     const connect = new MongosConnect();
-    console.log(devDB, colName, option)
     const data = connect.queryData(devDB, colName, option)
     return data
   }
