@@ -2,16 +2,6 @@ import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 
-// const advisorData = [
-//   { advisor: "ดร.ธัญญรัตน์" },
-//   { advisor: "ดร.คงศักดิ์" },
-//   { advisor: "ดร.อารีรัตน์" },
-//   { advisor: "ดร.นปภา" },
-//   { advisor: "ดร.อภิรดา" },
-//   { advisor: "ดร.วิภัสสร" },
-//   { advisor: "ดร.นันทวัน" },
-// ];
-
 export const Form = () => {
   const [batch, setBatch] = useState("");
   const [studentId, setStudentId] = useState("");
@@ -107,6 +97,16 @@ export const Form = () => {
       // console.log("PUT", response.status);
       if (response.status === 200) {
         toast.success("Update successfully.");
+        setBatch("");
+        setStudentId("");
+        setStudentName("");
+        setType("");
+        setTopic("");
+        setAdvisor("");
+        setCoAdvisor("");
+        setTerm("");
+        setGrade("");
+        setRemark("");
         // setReload(!reload);
       }
       // setEditId(null);
@@ -283,7 +283,7 @@ export const Form = () => {
                   </option>
 
                   {advisorData.length === 0 ? (
-                    <div>Error</div>
+                    <option>Error</option>
                   ) : (
                     advisorData.map((data: any, key) => (
                       <option

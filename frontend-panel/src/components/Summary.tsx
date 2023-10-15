@@ -88,8 +88,8 @@ export const Summary = () => {
     counts[key] = (counts[key] || 0) + 1;
   }
   const th = counts["TH"];
-  const ls = counts["LS"];
-  console.log(`TH : ${th} and LS : ${ls}`);
+  const ls = counts["IS"];
+  console.log(`TH : ${th} and IS : ${ls}`);
 
   return (
     <>
