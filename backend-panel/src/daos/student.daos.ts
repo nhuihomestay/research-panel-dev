@@ -2,7 +2,7 @@ import { MongosConnect } from "@db/Mongos.connect"
 import { DATABASE_NAME, COLLECTION_NAME } from "src/constant/db.constant";
 let devDB = ''
 let colName = ''
-if (process.env.NODE_ENV === 'dev') {
+if (process.env.NODE_ENV !== 'prod') {
   devDB = DATABASE_NAME.DEV_DB,
     colName = COLLECTION_NAME.STUDENT_TEST
 } else {
@@ -12,6 +12,7 @@ if (process.env.NODE_ENV === 'dev') {
 class StudentDaos {
   public async queryStudent(option: any): Promise<any> {
     const connect = new MongosConnect();
+    console.log(devDB, colName, option)
     const data = connect.queryData(devDB, colName, option)
     return data
   }

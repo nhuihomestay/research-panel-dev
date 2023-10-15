@@ -99,23 +99,19 @@ class AdvisorCtr {
 
   public async deleteAdvisor(body: any): Promise<any> {
     const advisorDaos = new AdvisorDaos()
-    const getData = await advisorDaos.queryAdvisor({ _id: body.id })
-    if (getData.length === 0) {
+
+    const updatedData = await advisorDaos.delAdvisor({ _id: body.id })
+    if (updatedData.length === 0) {
       return {
         data: {},
         devMessage: "Advisor not found"
       }
     }
-    const updatedData = await advisorDaos.delAdvisor({ _id: body.id })
-    if (updatedData.modifiedCount === 0) {
-      return {
-        data: {},
-        devMessage: "Update database is incomplete"
-      }
-    }
 
     return {
-      data: getData,
+      data: {
+        advisor_name: updatedData[0].advisor_name
+      },
       devMessage: "Success",
     };
   }

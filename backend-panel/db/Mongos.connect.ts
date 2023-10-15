@@ -85,7 +85,8 @@ class MongosConnect {
         try {
             await client.connect()
             const selectDB = client.db(db)
-            const data = selectDB.collection(collection).deleteOne(id)
+            const data = await selectDB.collection(collection).findOneAndDelete(id)
+            console.log(data)
             return data
         } catch (err: any) {
             console.log(err);

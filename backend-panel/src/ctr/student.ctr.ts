@@ -132,25 +132,18 @@ class StudentCtr {
 
   public async deleteStudent(body: any): Promise<any> {
     const studentDaos = new StudentDaos()
-    console.log(body)
-    const getData = await studentDaos.queryStudent({ student_id: body.student_id, is_graduated: 'true' })
-    console.log(getData)
-    if (getData.length === 0) {
+    const updatedData = await studentDaos.delStudent({ student_id: body.student_id, is_graduated: 'true' })
+    if (updatedData.length === 0) {
       return {
         data: {},
         devMessage: "Student not found"
       }
     }
-    const updatedData = await studentDaos.delStudent({ student_id: body.student_id })
-    if (updatedData.modifiedCount === 0) {
-      return {
-        data: {},
-        devMessage: "Update database is incomplete"
-      }
-    }
 
     return {
-      data: getData,
+      data: {
+        student_id: body.student_id
+      },
       devMessage: "Success",
     };
   }
