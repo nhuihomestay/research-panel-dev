@@ -167,7 +167,7 @@ export const Track = () => {
   const pageNumbers = Math.ceil(data.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem); 
 
   const paginate = (pageNumber: any) => {
     setCurrentPage(pageNumber);

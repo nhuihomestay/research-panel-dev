@@ -6,8 +6,8 @@ export const Navbar = () => {
       <div className="bg-[#C9DDFF] h-[4rem] flex justify-between items-center px-4 fixed w-full">
         <div className="sm:w-[50px] w-[40px]">
           <img
-            className="rounded-full"
-            src="https://scontent.fbkk29-7.fna.fbcdn.net/v/t1.6435-9/84190150_2884503264939006_8318157995041095680_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=174925&_nc_ohc=X4aUhr5-Pe8AX_H_87M&_nc_ht=scontent.fbkk29-7.fna&oh=00_AfB4oCLHQ1G8ut0L7KzwgxKnXky6h2zcXqF5hTayfSh1JQ&oe=654376A5"
+            className="rounded-md h-10"
+            src="https://scontent.fbkk29-1.fna.fbcdn.net/v/t39.30808-6/366367117_6694022813987013_5067234080579539244_n.jpg?stp=cp6_dst-jpg&_nc_cat=100&ccb=1-7&_nc_sid=5f2048&_nc_ohc=OH14R1A3M5wAX_kVTc2&_nc_ht=scontent.fbkk29-1.fna&oh=00_AfCDwgLwzZrNsYRHQDd13cA88cz0TNJpuqZ5zl9B1HJDPg&oe=6549D801"
             alt="logo"
           />
         </div>

@@ -5,14 +5,14 @@ import axios from "axios";
 // import { DataContext } from "../Context";
 
 export const Summary = () => {
-  const currentYear = (new Date).getFullYear() + 543;
-  const currentDate: String = (new Date).toLocaleDateString('th-TH', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    weekday: 'long'
+  // const currentYear = new Date().getFullYear() + 543;
+  const currentDate: String = new Date().toLocaleDateString("th-TH", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    weekday: "long",
   });
-  const currentTime: String = (new Date).toLocaleTimeString('th-TH')
+  const currentTime: String = new Date().toLocaleTimeString("th-TH");
 
   // const [advisors, setAdvisors] = useState<string>();
   // const { data }: any = useContext(DataContext);
@@ -61,7 +61,14 @@ export const Summary = () => {
   // console.log(advisorData);
   // console.log(dataStudent);
 
-  const foundItems = dataStudent.filter(
+  // graduated already
+
+  const notGraduated = dataStudent.filter(
+    (student: any) => student.is_graduated === "false"
+  );
+  // console.log(notGraduated);
+
+  const foundItems = notGraduated.filter(
     (item: any) => item.advisor_name && item.advisor_name.includes(advisor)
   );
   const foundItemsCo = dataStudent.filter(
@@ -69,15 +76,15 @@ export const Summary = () => {
       item.co_advisor_name && item.co_advisor_name.includes(advisor)
   );
 
-  console.log(foundItems);
-  console.log(foundItemsCo);
+  // console.log(foundItems);
+  // console.log(foundItemsCo);
 
   const result: any[] = [];
   foundItems.map((item: any) => {
     result.push(item.type);
     return item.type;
   });
-  console.log(`type ${result}`);
+  // console.log(`type ${result}`);
 
   const joinedString = result.join(",");
   const parts = joinedString.split(",");
@@ -89,14 +96,13 @@ export const Summary = () => {
   }
   const th = counts["TH"];
   const ls = counts["IS"];
-  console.log(`TH : ${th} and IS : ${ls}`);
+  // console.log(`TH : ${th} and IS : ${ls}`);
 
   return (
     <>
       <div className="bg-gray-500 min-h-screen pt-[80px]">
         <h1 className="text-center mx-auto text-3xl py-5 text-white">
-          ภาระงานอาจารย์ที่ปรึกษาวิทยานิพนธ์และการค้นคว้าอิสระ ปีการศึกษา
-          {currentYear}
+          ภาระงานอาจารย์ที่ปรึกษาวิทยานิพนธ์และการค้นคว้าอิสระ
         </h1>
         <div className="text-white mx-auto flex justify-center">
           <select
