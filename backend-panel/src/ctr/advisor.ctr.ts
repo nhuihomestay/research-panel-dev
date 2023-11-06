@@ -1,8 +1,16 @@
 import { AdvisorDaos, StudentDaos } from '@daos';
 import { lowerCase } from 'lodash';
+import { GetAdvisorRequest } from 'src/model';
 
 class AdvisorCtr {
   public async getAdvisor(query: any): Promise<any> {
+    const reqInit = new GetAdvisorRequest(query)
+    if (reqInit.error) {
+      return {
+        data: reqInit.error,
+        devMessage: 'Request is incomplete'
+      }
+    }
     const advisorDaos = new AdvisorDaos()
     const data = await advisorDaos.queryAdvisor(query ? query : {})
     return {

@@ -35,6 +35,9 @@
       "@db/*": [
         "db/*"
       ],
+      "@model": [
+        "src/model/*"
+      ],
     },
   },
   "include": [
